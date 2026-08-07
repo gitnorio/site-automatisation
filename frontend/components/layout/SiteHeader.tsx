@@ -1,25 +1,30 @@
-import { CalendarDays } from "lucide-react";
-import Link from "next/link";
+"use client";
 
-import { navigation } from "@/content/navigation";
-import { AboutMenu } from "@/components/layout/AboutMenu";
-import { MobileNavigation } from "@/components/layout/MobileNavigation";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function SiteHeader() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const updateHeader = () => setScrolled(window.scrollY > 80);
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    return () => window.removeEventListener("scroll", updateHeader);
+  }, []);
+
   return (
-    <header className="site-header">
-      <div className="announcement"><span aria-hidden="true">⚜</span> Astrapio est fière d’être une entreprise québécoise. <span className="announcement__secondary">Au service des PME d’ici.</span></div>
+    <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <div className="site-header__bar">
         <Link className="brand" href="/" aria-label="Astrapio — Accueil"><span className="brand__mark" aria-hidden="true">A</span><span>Astrapio</span></Link>
         <nav className="desktop-navigation" aria-label="Navigation principale">
-          {navigation.map((item) => <Link className="nav-link" key={item.href} href={item.href}>{item.label}</Link>)}
-          <AboutMenu />
-          <Link className="nav-link" href="/contact">Contact</Link>
+          <Link className="nav-link" href="/services">Services</Link>
+          <Link className="nav-link" href="/methodologie">Méthodologie</Link>
+          <Link className="nav-link" href="/a-propos">À propos</Link>
         </nav>
-        <Link className="retro-button retro-button--primary header-cta" href="/contact"><CalendarDays size={18} aria-hidden="true" /> Planifier une consultation</Link>
-        <MobileNavigation />
+        <Link className="header-cta" href="/contact">Parler de votre projet <ArrowUpRight aria-hidden="true" /></Link>
       </div>
     </header>
   );
 }
-

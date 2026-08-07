@@ -25,7 +25,7 @@ export const articles: Article[] = [
     category: "automatisation",
     categoryLabel: "Automatisation",
     author: "Équipe Astrapio",
-    image: "/images/pixel-art/blog-start-automation.webp",
+    image: "/images/editorial/blog-start.webp",
     imageAlt: "Gestionnaire cartographiant les tâches d’un processus administratif",
     relatedService: "automatisation-intelligente",
     sections: [
@@ -53,7 +53,7 @@ export const articles: Article[] = [
     category: "ia-pratique",
     categoryLabel: "IA pratique",
     author: "Équipe Astrapio",
-    image: "/images/pixel-art/blog-knowledge-base.webp",
+    image: "/images/editorial/blog-knowledge.webp",
     imageAlt: "Documents indexés reliés à une réponse accompagnée de sources",
     relatedService: "bases-de-connaissances",
     sections: [
@@ -81,7 +81,7 @@ export const articles: Article[] = [
     category: "integration",
     categoryLabel: "Intégration",
     author: "Équipe Astrapio",
-    image: "/images/pixel-art/blog-existing-software.webp",
+    image: "/images/editorial/blog-tools.webp",
     imageAlt: "Plusieurs logiciels existants reliés par une couche intelligente",
     relatedService: "integration-de-systemes",
     sections: [
@@ -105,4 +105,3 @@ export const articles: Article[] = [
 export function getArticle(slug: string) {
   return articles.find((article) => article.slug === slug);
 }
-

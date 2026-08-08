@@ -1,8 +1,6 @@
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
-import "@fontsource/ibm-plex-mono/600.css";
-import "@fontsource/vt323";
 import "./globals.css";
+import "./accenture-inspired.css";
+import "./n8n-inspired.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";

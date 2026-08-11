@@ -35,17 +35,18 @@ Le système doit :
 - validation stricte de la sortie JSON;
 - logique d'arrêt;
 - génération d'un Marketing Discovery Brief;
+- synchronisation CRM de base;
+- automatisations simples après qualification;
 - interface propre et moderne.
 
 ### Exclus pour le moment
 - PDF / analyse documentaire;
-- CRM;
 - voix;
 - avatar 3D;
 - scoring avancé;
 - dashboard complexe;
 - multi-verticales;
-- automatisations externes;
+- automatisations complexes;
 - paiement.
 
 ## Principe d'architecture essentiel

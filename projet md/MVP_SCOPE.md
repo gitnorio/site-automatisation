@@ -17,6 +17,8 @@ Un prospect d'agence marketing accepte de compléter une consultation IA interac
 - moteur d'état;
 - LLM par API;
 - dossier final structuré;
+- intégration CRM de base;
+- automatisations simples après qualification;
 - écran interne simple.
 
 ## Exclus
@@ -24,12 +26,12 @@ Un prospect d'agence marketing accepte de compléter une consultation IA interac
 - voix;
 - PDF;
 - PowerPoint;
-- CRM;
 - paiement;
 - multi-verticales;
 - analytics avancés;
 - scoring ML;
 - recommandations marketing.
+- automatisations complexes à plusieurs systèmes.
 
 ## Critères de succès
 

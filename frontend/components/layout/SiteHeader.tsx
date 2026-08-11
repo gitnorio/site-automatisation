@@ -19,11 +19,11 @@ export function SiteHeader() {
       <div className="site-header__bar">
         <Link className="brand" href="/" aria-label="Astrapio — Accueil"><span className="brand__mark" aria-hidden="true">A</span><span>Astrapio</span></Link>
         <nav className="desktop-navigation" aria-label="Navigation principale">
-          <Link className="nav-link" href="/services">Services</Link>
-          <Link className="nav-link" href="/methodologie">Méthodologie</Link>
-          <Link className="nav-link" href="/a-propos">À propos</Link>
+          <Link className="nav-link" href="/#experience">Produit</Link>
+          <Link className="nav-link" href="/#fonctionnement">Fonctionnement</Link>
+          <Link className="nav-link" href="/#garde-fous">Garde-fous</Link>
         </nav>
-        <Link className="header-cta" href="/contact">Parler de votre projet <ArrowUpRight aria-hidden="true" /></Link>
+        <Link className="header-cta" href="/contact">Demander une démo <ArrowUpRight aria-hidden="true" /></Link>
       </div>
     </header>
   );

@@ -2,17 +2,12 @@
 
 import {
   ArrowRight,
-  Bot,
   Check,
-  ChevronRight,
   Database,
   FileText,
   Inbox,
-  Link2,
-  Mail,
   MessageSquareText,
   RefreshCw,
-  Search,
   ShieldCheck,
   Sparkles,
   Users,
@@ -20,6 +15,19 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  siAirtable,
+  siGmail,
+  siGoogle,
+  siHubspot,
+  siMake,
+  siNotion,
+  siSalesforce,
+  siSlack,
+  siZapier,
+  siZoho,
+} from "simple-icons";
+import type { SimpleIcon } from "simple-icons";
 import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -52,9 +60,9 @@ export function Reveal({ children, className = "", delay = 0 }: RevealProps) {
 }
 
 const typewriterPhrases = [
-  "relie vos outils.",
-  "traite vos demandes.",
-  "prépare la prochaine action.",
+  "qualifie chaque prospect.",
+  "synchronise votre CRM.",
+  "déclenche le bon suivi.",
 ] as const;
 
 export function TypewriterLine() {
@@ -112,83 +120,43 @@ export function HeroArchitecture() {
   </div>;
 }
 
-const demoRequests = [
-  { company: "Atelier Nord", request: "Classer les demandes entrantes", channel: "Courriel", status: "Prêt à valider" },
-  { company: "Groupe Mercier", request: "Extraire les données du formulaire", channel: "Documents", status: "Données structurées" },
-  { company: "Bureau Lavoie", request: "Synchroniser le dossier client", channel: "CRM", status: "Mise à jour préparée" },
-] as const;
-
 export function ProductDemo() {
-  const [activeRequest, setActiveRequest] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const interval = window.setInterval(() => setActiveRequest((current) => (current + 1) % demoRequests.length), 3200);
-    return () => window.clearInterval(interval);
-  }, [paused]);
-
-  const request = demoRequests[activeRequest];
-
   return <Reveal className="dp-product-frame" delay={120}>
-    <div className="dp-browser-bar"><span /><span /><span /><code>astrapio.ca/espace-de-travail</code></div>
-    <div className="dp-product-demo" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={() => setPaused(false)}>
-      <aside className="dp-product-sidebar">
-        <div className="dp-product-sidebar__brand"><span>A</span><strong>Astrapio</strong></div>
-        <nav aria-label="Aperçu de la plateforme">
-          <button className="is-active" type="button"><Inbox aria-hidden="true" /> Demandes <b>8</b></button>
-          <button type="button"><Workflow aria-hidden="true" /> Automatisations</button>
-          <button type="button"><Database aria-hidden="true" /> Données</button>
-          <button type="button"><ShieldCheck aria-hidden="true" /> Contrôles</button>
-        </nav>
-      </aside>
-      <div className="dp-product-list">
-        <div className="dp-product-list__header"><div><span>Demandes unifiées</span><strong>À traiter aujourd’hui</strong></div><Search aria-hidden="true" /></div>
-        {demoRequests.map((item, index) => <button className={index === activeRequest ? "is-active" : ""} type="button" key={item.company} onClick={() => setActiveRequest(index)}>
-          <span className="dp-request-icon"><Mail aria-hidden="true" /></span>
-          <span><strong>{item.company}</strong><small>{item.request}</small></span>
-          <time>{index + 8}:2{index}</time>
-        </button>)}
-      </div>
-      <div className="dp-product-detail" key={request.company}>
-        <header><div><span>{request.channel}</span><h3>{request.company}</h3></div><span className="dp-product-detail__state">Analyse terminée</span></header>
-        <div className="dp-product-detail__conversation">
-          <div className="dp-message dp-message--client"><small>Demande reçue</small><p>{request.request}. Pouvez-vous préparer la prochaine étape?</p></div>
-          <div className="dp-message dp-message--assistant"><small><Bot aria-hidden="true" /> Astrapio</small><p>Le contexte autorisé a été vérifié. La demande est structurée et prête pour votre équipe.</p></div>
-          <div className="dp-validation"><div><Check aria-hidden="true" /><span><strong>{request.status}</strong><small>Une validation humaine est requise avant l’action finale.</small></span></div><button type="button">Valider <ChevronRight aria-hidden="true" /></button></div>
-        </div>
-      </div>
+    <div className="dp-browser-bar"><span /><span /><span /><code>app.astrapio.ca/consultation/acme</code></div>
+    <div className="dp-product-preview">
+      <Image src="/images/product/consultation-marque-blanche-wall-logo-v6.webp" alt="Interface de consultation en marque blanche avec accompagnatrice IA, réponses à choix et enseigne Votre Logo sur le mur" width={3072} height={2048} quality={92} priority sizes="(max-width: 700px) 900px, 1180px" />
+      <div className="dp-product-preview__caption"><span>Expérience participant</span><strong>Un parcours confidentiel et guidé, accessible directement depuis le lien reçu par courriel.</strong></div>
     </div>
   </Reveal>;
 }
 
-const channels = [
-  [Mail, "Courriel", "12 demandes", "Des pièces jointes à traiter"],
-  [MessageSquareText, "Formulaires", "7 demandes", "Des champs à vérifier"],
-  [Users, "CRM", "5 dossiers", "Des suivis à préparer"],
-  [FileText, "Documents", "9 fichiers", "Des données à extraire"],
+const objectives = [
+  [Users, "Entreprise", "Confirmé", "Offre et clientèle comprises"],
+  [MessageSquareText, "Déclencheur", "Partiel", "La raison d’agir se précise"],
+  [FileText, "Budget", "À confirmer", "Une fourchette reste à obtenir"],
+  [ShieldCheck, "Décision", "Confirmé", "Les parties prenantes sont connues"],
 ] as const;
 
-export function ChannelChaos() {
+export function ObjectiveMap() {
   const [highlighted, setHighlighted] = useState(0);
   useEffect(() => {
-    const interval = window.setInterval(() => setHighlighted((current) => (current + 1) % channels.length), 1900);
+    const interval = window.setInterval(() => setHighlighted((current) => (current + 1) % objectives.length), 1900);
     return () => window.clearInterval(interval);
   }, []);
 
   return <div className="dp-channel-map">
     <div className="dp-channel-map__grid" />
-    {channels.map(([Icon, title, count, copy], index) => <article className={`dp-channel-card dp-channel-card--${index + 1} ${highlighted === index ? "is-active" : ""}`} key={title}>
+    {objectives.map(([Icon, title, count, copy], index) => <article className={`dp-channel-card dp-channel-card--${index + 1} ${highlighted === index ? "is-active" : ""}`} key={title}>
       <div><Icon aria-hidden="true" /><span>{title}</span><strong>{count}</strong></div><p>{copy}</p>
     </article>)}
     <svg viewBox="0 0 800 470" aria-hidden="true"><path d="M165 100 C300 100 285 210 385 225" /><path d="M635 100 C500 100 515 210 415 225" /><path d="M165 370 C300 370 285 245 385 235" /><path d="M635 370 C500 370 515 245 415 235" /></svg>
-    <div className="dp-channel-hub"><RefreshCw aria-hidden="true" /><strong>28</strong><span>actions dispersées</span></div>
+    <div className="dp-channel-hub"><RefreshCw aria-hidden="true" /><strong>14</strong><span>objectifs suivis</span></div>
   </div>;
 }
 
-const qualificationSteps = ["Demande lue", "Données extraites", "Règles vérifiées", "Action préparée"] as const;
+const qualificationSteps = ["Consultation qualifiée", "Dossier structuré", "CRM synchronisé", "Automatisation lancée"] as const;
 
-export function QualificationPanel() {
+export function AutomationFlow() {
   const [completedSteps, setCompletedSteps] = useState(0);
   useEffect(() => {
     const interval = window.setInterval(() => setCompletedSteps((current) => current >= qualificationSteps.length ? 0 : current + 1), 1200);
@@ -196,61 +164,74 @@ export function QualificationPanel() {
   }, []);
 
   return <div className="dp-qualification">
-    <div className="dp-qualification__header"><div className="dp-qualification__avatar">V</div><div><strong>Demande de Véronique</strong><span>Reçue il y a quelques secondes</span></div></div>
-    <div className="dp-qualification__message">Nous avons reçu trois documents. Le dossier doit être créé dans le CRM et assigné à l’équipe des opérations.</div>
-    <div className="dp-qualification__versus"><span>Traitement manuel</span><b>comparé à</b><span>Astrapio</span></div>
+    <div className="dp-qualification__header"><div className="dp-qualification__avatar">V</div><div><strong>Consultation de Véronique</strong><span>Qualification prioritaire</span></div></div>
+    <div className="dp-qualification__message">Le prospect est qualifié. Astrapio prépare le dossier, met à jour le CRM et déclenche le suivi prévu par votre agence.</div>
+    <div className="dp-qualification__versus"><span>Consultation terminée</span><b>déclenche</b><span>Vos opérations</span></div>
     <div className="dp-qualification__steps">{qualificationSteps.map((step, index) => <div className={index < completedSteps ? "is-complete" : ""} key={step}><span>{index < completedSteps ? <Check aria-hidden="true" /> : index + 1}</span><strong>{step}</strong><small>{index < completedSteps ? "Terminé" : "En attente"}</small></div>)}</div>
     <div className="dp-qualification__progress"><span style={{ width: `${(completedSteps / qualificationSteps.length) * 100}%` }} /></div>
   </div>;
 }
 
-const integrations = ["Microsoft 365", "Outlook", "Teams", "SharePoint", "Google Drive", "HubSpot", "Salesforce", "Slack", "Notion", "Zapier"];
+const connectedEnvironments: ReadonlyArray<{ name: string; icon: SimpleIcon }> = [
+  { name: "Zoho CRM", icon: siZoho },
+  { name: "HubSpot", icon: siHubspot },
+  { name: "Salesforce", icon: siSalesforce },
+  { name: "Google Workspace", icon: siGoogle },
+  { name: "Gmail", icon: siGmail },
+  { name: "Slack", icon: siSlack },
+  { name: "Zapier", icon: siZapier },
+  { name: "Make", icon: siMake },
+  { name: "Notion", icon: siNotion },
+  { name: "Airtable", icon: siAirtable },
+];
 
-const operationNotifications = [
-  "Nouvelle demande classée",
-  "Dossier CRM préparé",
-  "Exception envoyée à l’équipe",
-  "Rapport hebdomadaire généré",
+const consultationNotifications = [
+  "Brief prêt à consulter",
+  "Objectif principal confirmé",
+  "Budget à clarifier",
+  "Consultation interrompue",
 ];
 
 export function IntegrationMarquee() {
-  const repeated = [...integrations, ...integrations];
-  return <div className="dp-marquee" aria-label="Exemples d’intégrations">
+  const repeated = [...connectedEnvironments, ...connectedEnvironments];
+  return <div className="dp-marquee" aria-label="Environnements pouvant être connectés à Astrapio">
     <div className="dp-marquee__fade dp-marquee__fade--left" />
-    <div className="dp-marquee__track">{repeated.map((integration, index) => <span key={`${integration}-${index}`}><Link2 aria-hidden="true" />{integration}</span>)}</div>
+    <div className="dp-marquee__track">{repeated.map(({ name, icon }, index) => <span key={`${name}-${index}`}>
+      <svg className="dp-integration-logo" viewBox="0 0 24 24" aria-hidden="true" style={{ color: `#${icon.hex}` }}><path d={icon.path} fill="currentColor" /></svg>
+      {name}
+    </span>)}</div>
     <div className="dp-marquee__fade dp-marquee__fade--right" />
   </div>;
 }
 
-export function OperationsDashboard() {
+export function DiscoveryDashboard() {
   const [notificationIndex, setNotificationIndex] = useState(0);
   useEffect(() => {
-    const interval = window.setInterval(() => setNotificationIndex((current) => (current + 1) % operationNotifications.length), 2800);
+    const interval = window.setInterval(() => setNotificationIndex((current) => (current + 1) % consultationNotifications.length), 2800);
     return () => window.clearInterval(interval);
   }, []);
 
   return <div className="dp-operations-dashboard">
     <aside><div className="dp-operations-dashboard__logo">A</div>{[Inbox, Workflow, Database, Users].map((Icon, index) => <span className={index === 0 ? "is-active" : ""} key={index}><Icon aria-hidden="true" /></span>)}</aside>
-    <div className="dp-operations-dashboard__inbox"><header><div><small>Bonjour, équipe.</small><h3>Centre d’opérations</h3></div><span>12 actifs</span></header>{["Soumission — Atelier Nord", "Courriel — Groupe Mercier", "Document — Bureau Lavoie", "Synchronisation — Nova"].map((item, index) => <div className={index === notificationIndex ? "is-active" : ""} key={item}><span className="dp-inbox-symbol">{index + 1}</span><p><strong>{item}</strong><small>{index === notificationIndex ? operationNotifications[notificationIndex] : "Traitement automatisé"}</small></p><time>{index + 1} min</time></div>)}</div>
-    <div className="dp-operations-dashboard__detail"><div className="dp-operations-dashboard__toolbar"><span>Flux en cours</span><strong>{operationNotifications[notificationIndex]}</strong></div><div className="dp-operations-dashboard__timeline">{["Entrée reçue", "Contexte vérifié", "Données structurées", "Validation humaine", "Action finale"].map((step, index) => <div className={index <= notificationIndex ? "is-complete" : ""} key={step}><span>{index < notificationIndex ? <Check aria-hidden="true" /> : index + 1}</span><p><strong>{step}</strong><small>{index <= notificationIndex ? "Étape documentée" : "À venir"}</small></p></div>)}</div><div className="dp-operations-dashboard__summary"><Sparkles aria-hidden="true" /><p><strong>Une vue claire du travail.</strong><span>Les actions, exceptions et validations restent visibles au même endroit.</span></p></div></div>
+    <div className="dp-operations-dashboard__inbox"><header><div><small>Bonjour, équipe.</small><h3>Consultations</h3></div><span>8 actives</span></header>{["Maison Lumen", "Atelier Nord", "Nova Santé", "Studio Boréal"].map((item, index) => <div className={index === notificationIndex ? "is-active" : ""} key={item}><span className="dp-inbox-symbol">{index + 1}</span><p><strong>{item}</strong><small>{index === notificationIndex ? consultationNotifications[notificationIndex] : "Dossier prospect"}</small></p><time>{index + 5} min</time></div>)}</div>
+    <div className="dp-operations-dashboard__detail"><div className="dp-operations-dashboard__toolbar"><span>Marketing Discovery Brief</span><strong>{consultationNotifications[notificationIndex]}</strong></div><div className="dp-operations-dashboard__timeline">{["Profil d’entreprise", "Objectif principal", "Problème déclencheur", "Budget et échéancier", "Processus de décision"].map((step, index) => <div className={index <= notificationIndex ? "is-complete" : ""} key={step}><span>{index < notificationIndex ? <Check aria-hidden="true" /> : index + 1}</span><p><strong>{step}</strong><small>{index <= notificationIndex ? "Information confirmée" : "À clarifier"}</small></p></div>)}</div><div className="dp-operations-dashboard__summary"><Sparkles aria-hidden="true" /><p><strong>Prêt pour la conversation humaine.</strong><span>Le contexte confirmé, les manques et les contradictions sont réunis au même endroit.</span></p></div></div>
   </div>;
 }
 
-export function RoiCalculator() {
-  const [hoursPerWeek, setHoursPerWeek] = useState(18);
-  const [teamSize, setTeamSize] = useState(4);
-  const monthlyHours = Math.round(hoursPerWeek * teamSize * 4.33);
-  const recoveredHours = Math.round(monthlyHours * 0.64);
-  const annualValue = Math.round(recoveredHours * 12 * 42 / 100) * 100;
+export function ConsultationEstimator() {
+  const [requiredObjectives, setRequiredObjectives] = useState(8);
+  const [followUps, setFollowUps] = useState(2);
+  const questionCount = Math.min(14, requiredObjectives + followUps);
+  const estimatedMinutes = Math.max(4, Math.round(questionCount * 0.65));
 
   return <div className="dp-roi">
     <div className="dp-roi__controls">
-      <label><span>Heures répétitives par personne <strong>{hoursPerWeek} h / semaine</strong></span><input type="range" min="4" max="40" value={hoursPerWeek} onChange={(event) => setHoursPerWeek(Number(event.target.value))} /></label>
-      <label><span>Personnes concernées <strong>{teamSize}</strong></span><input type="range" min="1" max="20" value={teamSize} onChange={(event) => setTeamSize(Number(event.target.value))} /></label>
-      <p>Estimation indicative basée sur un taux d’automatisation prudent de 64 % et un coût horaire chargé de 42 $.</p>
+      <label><span>Objectifs obligatoires à confirmer <strong>{requiredObjectives}</strong></span><input type="range" min="6" max="10" value={requiredObjectives} onChange={(event) => setRequiredObjectives(Number(event.target.value))} /></label>
+      <label><span>Approfondissements nécessaires <strong>{followUps}</strong></span><input type="range" min="0" max="4" value={followUps} onChange={(event) => setFollowUps(Number(event.target.value))} /></label>
+      <p>Aperçu illustratif. Le moteur peut éviter une question lorsqu’une réponse couvre déjà plusieurs objectifs.</p>
     </div>
     <div className="dp-roi__result">
-      <span>Potentiel annuel estimé</span><strong>{annualValue.toLocaleString("fr-CA")} $</strong><p><b>{recoveredHours} heures</b> pourraient être réallouées chaque mois à du travail à plus forte valeur.</p><Link href="/contact">Évaluer votre processus <ArrowRight aria-hidden="true" /></Link>
+      <span>Parcours estimé</span><strong>{questionCount}</strong><p><b>Environ {estimatedMinutes} minutes</b> pour couvrir les objectifs utiles sans dépasser le plafond de 14 questions.</p><Link href="/contact">Concevoir votre Blueprint <ArrowRight aria-hidden="true" /></Link>
     </div>
   </div>;
 }

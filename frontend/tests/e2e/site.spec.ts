@@ -1,18 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-test("navigation, services and contact journey", async ({ page, isMobile }) => {
+test("discovery landing and demo journey", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /L’intelligence artificielle/i })).toBeVisible();
-  if (isMobile) await page.getByRole("button", { name: /ouvrir le menu/i }).click();
-  await page.getByRole("link", { name: "Services", exact: true }).first().click();
-  await expect(page).toHaveURL(/\/services/);
-  await page.getByPlaceholder("Rechercher un service...").fill("soumission");
-  await page.getByPlaceholder("Rechercher un service...").press("Enter");
-  await page.getByRole("button", { name: /Ouvrir la fiche Traitement des demandes de soumission/i }).click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await page.getByRole("link", { name: /Discuter de ce service/i }).click();
-  await expect(page).toHaveURL(/\/contact\?service=demandes-de-soumission/);
-  await expect(page.getByText("Traitement des demandes de soumission")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Le bon brief/i })).toBeVisible();
+  await expect(page.getByText(/Chaque réponse devient du contexte exploitable/i)).toBeVisible();
+  await page.getByRole("link", { name: "Demander une démo" }).first().click();
+  await expect(page).toHaveURL(/\/contact/);
 });
 
 test("removed pages are not linked", async ({ page }) => {

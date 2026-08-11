@@ -1,11 +1,16 @@
 # Plan d'implémentation
 
 ## Phase 0 — audit
-- inspecter le repo;
-- confirmer la stack;
-- ajouter variables d'environnement;
-- choisir le fournisseur LLM initial;
-- définir les schémas Zod/JSON.
+
+Statut : **terminée le 10 août 2026**.
+
+- [x] inspecter le repo;
+- [x] confirmer la stack;
+- [x] ajouter variables d'environnement;
+- [x] choisir le fournisseur LLM initial;
+- [x] définir les schémas Pydantic/JSON Schema adaptés au backend FastAPI existant.
+
+Voir `PHASE_0_DECISIONS.md` pour les décisions adaptées au dépôt.
 
 ## Phase 1 — Blueprint en code
 
@@ -27,6 +32,10 @@ Construire accueil, question, choix, texte libre, progression et fin.
 
 Créer le JSON structuré final et une vue interne lisible.
 
+## Phase 5.5 — CRM et automatisations de base
+
+Créer l’interface de connecteur, un premier connecteur pilote, la correspondance des champs autorisés, les webhooks et la journalisation des exécutions. Garder les orchestrations complexes hors MVP.
+
 ## Phase 6 — scénarios de test
 
 Tester au minimum :
@@ -40,4 +49,4 @@ Tester au minimum :
 
 ## Phase 7 — tests terrain
 
-Ne pas ajouter PDF, CRM, avatar ou voix avant d'avoir observé de vraies consultations.
+Ne pas ajouter PDF, avatar, voix ou automatisations complexes avant d'avoir observé de vraies consultations.

@@ -14,151 +14,156 @@ import {
 import Link from "next/link";
 
 import {
-  ChannelChaos,
+  AutomationFlow,
+  ConsultationEstimator,
+  DiscoveryDashboard,
   HeroArchitecture,
+  ObjectiveMap,
   IntegrationMarquee,
-  OperationsDashboard,
   ProductDemo,
-  QualificationPanel,
   Reveal,
-  RoiCalculator,
   TypewriterLine,
 } from "@/components/home/DominiumExperience";
 import { pageMetadata, siteUrl } from "@/lib/metadata";
 
 export const metadata = pageMetadata(
-  "Automatisation intelligente pour PME",
-  "Astrapio relie vos outils, automatise les opérations répétitives et garde vos équipes en contrôle.",
+  "Consultation IA, CRM et automatisations pour agences",
+  "Astrapio qualifie vos prospects, structure leur brief, synchronise votre CRM et déclenche les automatisations de votre agence.",
   "/",
 );
 
 const capabilities = [
   {
     icon: Workflow,
-    eyebrow: "Automatiser",
-    title: "Des opérations qui avancent sans relance manuelle.",
-    description: "Astrapio classe les demandes, extrait les données et prépare la prochaine action selon vos règles.",
+    eyebrow: "Découverte adaptative",
+    title: "Votre agence décide ce qu’elle doit apprendre.",
+    description: "Définissez les objectifs essentiels à votre découverte client. Astrapio suit leur progression et adapte chaque question au contexte du prospect.",
     className: "dp-feature-card--wide dp-feature-card--blue",
   },
   {
     icon: MessageSquareText,
-    eyebrow: "Assister",
-    title: "La bonne information, au bon moment.",
-    description: "Vos équipes obtiennent des réponses fondées sur les sources que vous avez approuvées.",
+    eyebrow: "Intégrations CRM",
+    title: "Les données utiles rejoignent vos environnements.",
+    description: "Connectez Zoho CRM, HubSpot, Salesforce, Pipedrive ou vos outils internes pour éviter la ressaisie après la consultation.",
     className: "dp-feature-card--tall",
   },
   {
     icon: Network,
-    eyebrow: "Connecter",
-    title: "Vos logiciels travaillent enfin ensemble.",
-    description: "Courriel, CRM, documents et outils internes partagent un flux cohérent, sans remplacement inutile.",
+    eyebrow: "Automatisations",
+    title: "Un prospect qualifié peut déclencher la bonne suite.",
+    description: "Créez le dossier, assignez un responsable, envoyez une notification ou préparez un suivi selon vos règles.",
     className: "",
   },
   {
     icon: ShieldCheck,
-    eyebrow: "Contrôler",
-    title: "Chaque décision importante reste visible.",
-    description: "Les validations humaines, exceptions et journaux d’activité sont intégrés dès la conception.",
+    eyebrow: "Délégation contrôlée",
+    title: "L’IA qualifie. Votre équipe conseille.",
+    description: "Astrapio ne recommande ni stratégie, ni canal, ni budget. La relation et le jugement restent humains.",
     className: "dp-feature-card--dark",
   },
 ] as const;
 
 const faqs = [
-  ["Devons-nous remplacer nos logiciels?", "Non. Nous connectons d’abord les outils que vos équipes utilisent déjà et ne proposons un remplacement que lorsqu’il est réellement justifié."],
-  ["Peut-on commencer avec un seul processus?", "Oui. Un pilote court et mesurable permet de confirmer la valeur, les accès et la qualité avant d’étendre l’automatisation."],
-  ["Où intervient l’humain?", "Votre équipe conserve la validation des décisions sensibles. Astrapio prépare, documente et signale les exceptions au lieu de les masquer."],
+  ["Est-ce simplement un chatbot?", "Non. La consultation suit un Blueprint précis, maintient l’état de chaque objectif et valide chaque prochaine étape côté serveur."],
+  ["Astrapio remplace-t-il notre consultant?", "Non. Astrapio prépare le contexte avant l’échange. Votre équipe conserve l’analyse, les recommandations et la relation client."],
+  ["Le prospect reçoit-il une stratégie marketing?", "Non. L’expérience documente le besoin sans recommander de stratégie, de canal, de budget, de prix ou de livrable."],
+  ["Combien de temps dure une consultation?", "Le parcours cible environ sept minutes et s’arrête lorsque les informations obligatoires sont suffisamment confirmées."],
+  ["Que se passe-t-il si le prospect quitte?", "Les réponses déjà fournies peuvent être conservées et les informations manquantes sont clairement indiquées dans le dossier."],
+  ["Quels CRM peut-on connecter?", "Astrapio est conçu pour communiquer avec des environnements comme Zoho CRM, HubSpot, Salesforce, Pipedrive et Microsoft Dynamics, selon les accès disponibles."],
+  ["Que peut-on automatiser après la consultation?", "La plateforme peut préparer un dossier, synchroniser les champs autorisés, notifier votre équipe et déclencher un suivi défini par votre agence."],
 ] as const;
 
 export default function HomePage() {
-  const organizationJsonLd = {
+  const softwareJsonLd = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: "Astrapio",
+    "@type": "SoftwareApplication",
+    name: "Astrapio Discovery",
     url: siteUrl,
-    areaServed: { "@type": "AdministrativeArea", name: "Québec" },
-    description: "Conception et intégration d’automatisations intelligentes pour les PME québécoises.",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: "Plateforme de consultation IA adaptative, de synchronisation CRM et d’automatisation pour agences marketing.",
   };
 
   return (
     <div className="dp-home">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }} />
 
       <section className="dp-hero">
         <HeroArchitecture />
         <div className="dp-hero__wash" aria-hidden="true" />
         <div className="dp-container dp-hero__content">
           <Reveal className="dp-hero__copy">
-            <div className="dp-pill-label"><span /> Automatisation intelligente pour PME</div>
-            <h1>Votre entreprise.<br /><em>En mouvement.</em></h1>
+            <div className="dp-pill-label"><span /> Consultation IA pour agences marketing</div>
+            <h1>Le bon brief.<br /><em>Avant l’appel.</em></h1>
             <p className="dp-hero__type"><TypewriterLine /></p>
-            <p className="dp-hero__lede">Nous transformons les tâches dispersées en opérations simples, reliées et mesurables — sans remplacer les outils qui fonctionnent déjà.</p>
+            <p className="dp-hero__lede">Qualifiez chaque prospect dans une consultation guidée, synchronisez les informations utiles avec votre CRM et déclenchez la suite de vos opérations sans ressaisie.</p>
             <div className="dp-action-row">
-              <Link className="dp-button dp-button--primary" href="/contact">Découvrir votre potentiel <ArrowRight aria-hidden="true" /></Link>
-              <Link className="dp-button dp-button--ghost" href="/services">Voir les services</Link>
+              <Link className="dp-button dp-button--primary" href="/contact">Demander une démo <ArrowRight aria-hidden="true" /></Link>
+              <Link className="dp-button dp-button--ghost" href="#experience">Voir l’expérience</Link>
             </div>
             <div className="dp-hero__proof">
-              <span><CircleCheck aria-hidden="true" /> Pilote ciblé</span>
-              <span><CircleCheck aria-hidden="true" /> Contrôle humain</span>
-              <span><CircleCheck aria-hidden="true" /> Données protégées</span>
+              <span><CircleCheck aria-hidden="true" /> Environ 7 minutes</span>
+              <span><CircleCheck aria-hidden="true" /> Questions adaptatives</span>
+              <span><CircleCheck aria-hidden="true" /> CRM et automatisations</span>
             </div>
           </Reveal>
         </div>
       </section>
 
-      <section className="dp-demo-section dp-container" aria-labelledby="demo-title">
+      <section className="dp-demo-section dp-container" id="experience" aria-labelledby="demo-title">
         <Reveal className="dp-section-intro dp-section-intro--center">
-          <p className="dp-eyebrow">Un espace de travail unifié</p>
-          <h2 id="demo-title">Tout ce qui compte.<br />Une seule vue.</h2>
-          <p>Suivez les demandes, les validations et les actions automatisées sans perdre le contexte.</p>
+          <p className="dp-eyebrow">Avant la première rencontre</p>
+          <h2 id="demo-title">La consultation, le contexte<br />et la qualification en direct.</h2>
+          <p>Le prospect répond dans une expérience guidée pendant que les objectifs, la progression et les signaux de qualification se structurent.</p>
         </Reveal>
         <ProductDemo />
       </section>
 
-      <section className="dp-problem-section">
+      <section className="dp-problem-section" id="fonctionnement">
         <div className="dp-container">
           <Reveal className="dp-section-intro dp-section-intro--center">
-            <p className="dp-eyebrow">Pourquoi maintenant</p>
-            <h2>Vos équipes ne devraient pas<br />servir de pont entre vos outils.</h2>
-            <p>Quand l’information voyage par copier-coller, chaque nouveau client ajoute du travail plutôt que de la capacité.</p>
+            <p className="dp-eyebrow">Une vraie découverte</p>
+            <h2>Un formulaire collecte des réponses.<br />Astrapio révèle le contexte.</h2>
+            <p>La prochaine question dépend de ce que le prospect vient réellement d’expliquer, pas d’un parcours figé à l’avance.</p>
           </Reveal>
 
           <div className="dp-story-row">
             <Reveal className="dp-story-row__copy">
               <span className="dp-story-number">01</span>
-              <h3>Les demandes arrivent de partout.</h3>
-              <p>Courriels, formulaires, fichiers et CRM créent des files parallèles. Astrapio les rassemble dans un parcours lisible.</p>
+              <h3>Chaque objectif avance séparément.</h3>
+              <p>Le moteur suit le profil de l’entreprise, le problème déclencheur, le budget, l’échéancier et le processus de décision sans reposer ce qui est déjà clair.</p>
               <ul>
-                <li><Check aria-hidden="true" /> Une priorité commune</li>
-                <li><Check aria-hidden="true" /> Moins de double saisie</li>
-                <li><Check aria-hidden="true" /> Un historique complet</li>
+                <li><Check aria-hidden="true" /> Informations obligatoires suivies</li>
+                <li><Check aria-hidden="true" /> Contradictions signalées</li>
+                <li><Check aria-hidden="true" /> Relances choisies selon le contexte</li>
               </ul>
             </Reveal>
-            <Reveal className="dp-story-row__visual" delay={120}><ChannelChaos /></Reveal>
+            <Reveal className="dp-story-row__visual" delay={120}><ObjectiveMap /></Reveal>
           </div>
 
           <div className="dp-story-row dp-story-row--reverse">
             <Reveal className="dp-story-row__copy">
               <span className="dp-story-number">02</span>
-              <h3>Le processus s’exécute, étape par étape.</h3>
-              <p>Chaque règle est explicite. Les actions sûres avancent automatiquement; les décisions sensibles reviennent à votre équipe.</p>
-              <Link className="dp-text-link" href="/methodologie">Voir notre méthodologie <ArrowRight aria-hidden="true" /></Link>
+              <h3>Le brief alimente directement vos opérations.</h3>
+              <p>Une fois le prospect qualifié, Astrapio prépare le dossier, synchronise votre CRM et déclenche les actions que votre agence a définies.</p>
+              <Link className="dp-text-link" href="#brief">Voir le dossier agence <ArrowRight aria-hidden="true" /></Link>
             </Reveal>
-            <Reveal className="dp-story-row__visual" delay={120}><QualificationPanel /></Reveal>
+            <Reveal className="dp-story-row__visual" delay={120}><AutomationFlow /></Reveal>
           </div>
         </div>
       </section>
 
       <section className="dp-capabilities dp-container" aria-labelledby="capabilities-title">
         <Reveal className="dp-section-intro">
-          <p className="dp-eyebrow">Une plateforme adaptée à vos opérations</p>
-          <h2 id="capabilities-title">Moins d’étapes inutiles.<br />Plus de travail accompli.</h2>
+          <p className="dp-eyebrow">De la découverte à l’action</p>
+          <h2 id="capabilities-title">Un seul parcours.<br />Tous vos environnements connectés.</h2>
         </Reveal>
         <div className="dp-feature-grid">
           {capabilities.map(({ icon: Icon, eyebrow, title, description, className }, index) => (
             <Reveal className={`dp-feature-card ${className}`} delay={index * 90} key={title}>
               <div className="dp-feature-card__icon"><Icon aria-hidden="true" /></div>
               <div><span>{eyebrow}</span><h3>{title}</h3><p>{description}</p></div>
-              <Link href="/services">Explorer <ArrowRight aria-hidden="true" /></Link>
+              <Link href="/contact">En discuter <ArrowRight aria-hidden="true" /></Link>
             </Reveal>
           ))}
         </div>
@@ -166,42 +171,42 @@ export default function HomePage() {
 
       <section className="dp-integrations">
         <div className="dp-container">
-          <Reveal className="dp-integrations__heading"><span>Connecté à votre réalité</span><p>Astrapio s’intègre aux outils qui font déjà avancer votre entreprise.</p></Reveal>
+          <Reveal className="dp-integrations__heading"><span>Connectez tous vos environnements</span><p>CRM, courriel, collaboration et systèmes internes peuvent recevoir les informations qualifiées et poursuivre le travail.</p></Reveal>
         </div>
         <IntegrationMarquee />
       </section>
 
-      <section className="dp-dashboard-section dp-container">
+      <section className="dp-dashboard-section dp-container" id="brief">
         <Reveal className="dp-section-intro dp-section-intro--center">
-          <p className="dp-eyebrow">Le contrôle sans la friction</p>
-          <h2>Une opération autonome.<br />Jamais une boîte noire.</h2>
-          <p>Voyez ce qui avance, ce qui attend une validation et ce qui mérite votre attention.</p>
+          <p className="dp-eyebrow">Après la consultation</p>
+          <h2>Le contexte important.<br />Sans relire toute la conversation.</h2>
+          <p>Votre équipe voit ce qui est confirmé, ce qui manque et ce qui mérite d’être clarifié pendant la rencontre.</p>
         </Reveal>
-        <Reveal delay={120}><OperationsDashboard /></Reveal>
+        <Reveal delay={120}><DiscoveryDashboard /></Reveal>
       </section>
 
-      <section className="dp-blue-band">
+      <section className="dp-blue-band" id="garde-fous">
         <div className="dp-container dp-blue-band__grid">
-          <Reveal><p className="dp-eyebrow">Conçu pour inspirer confiance</p><h2>L’IA utile commence par des règles claires.</h2></Reveal>
+          <Reveal><p className="dp-eyebrow">Une délégation contrôlée</p><h2>L’IA pose les questions. Vous gardez le jugement.</h2></Reveal>
           <Reveal className="dp-blue-band__points" delay={120}>
-            <article><LockKeyhole aria-hidden="true" /><strong>Accès maîtrisés</strong><span>Chaque système utilise uniquement les permissions nécessaires.</span></article>
-            <article><FileCheck2 aria-hidden="true" /><strong>Actions traçables</strong><span>Les étapes et validations restent documentées.</span></article>
-            <article><Gauge aria-hidden="true" /><strong>Résultats mesurés</strong><span>Le pilote suit des objectifs convenus dès le départ.</span></article>
+            <article><LockKeyhole aria-hidden="true" /><strong>Backend autoritaire</strong><span>L’état, les transitions et la fin de consultation sont validés par des règles serveur.</span></article>
+            <article><FileCheck2 aria-hidden="true" /><strong>Sorties structurées</strong><span>Chaque extraction et décision respecte un contrat strict avant d’être utilisée.</span></article>
+            <article><Gauge aria-hidden="true" /><strong>Périmètre clair</strong><span>Aucun conseil, prix, délai ou engagement n’est formulé au prospect.</span></article>
           </Reveal>
         </div>
       </section>
 
       <section className="dp-roi-section dp-container">
         <Reveal className="dp-section-intro">
-          <p className="dp-eyebrow">Estimez l’occasion</p>
-          <h2>Combien de temps pourriez-vous rendre à votre équipe?</h2>
-          <p>Ajustez les paramètres pour obtenir un premier ordre de grandeur.</p>
+          <p className="dp-eyebrow">Un parcours volontairement court</p>
+          <h2>Assez de contexte.<br />Pas une question de trop.</h2>
+          <p>Explorez comment les objectifs obligatoires et les approfondissements influencent la longueur d’une consultation.</p>
         </Reveal>
-        <Reveal delay={100}><RoiCalculator /></Reveal>
+        <Reveal delay={100}><ConsultationEstimator /></Reveal>
       </section>
 
       <section className="dp-faq dp-container">
-        <Reveal className="dp-section-intro"><p className="dp-eyebrow">Questions fréquentes</p><h2>Avancer avec les bonnes réponses.</h2></Reveal>
+        <Reveal className="dp-section-intro"><p className="dp-eyebrow">Questions fréquentes</p><h2>Une IA qui prépare la relation. Elle ne la remplace pas.</h2></Reveal>
         <Reveal className="dp-faq__list" delay={100}>{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</Reveal>
       </section>
 
@@ -210,10 +215,10 @@ export default function HomePage() {
         <div className="dp-container">
           <Reveal className="dp-final-cta__content">
             <div className="dp-final-cta__icon"><Sparkles aria-hidden="true" /></div>
-            <p className="dp-eyebrow">Votre prochain gain opérationnel</p>
-            <h2>Transformons un processus<br />qui ralentit votre équipe.</h2>
-            <p>Une conversation de 30 minutes suffit pour identifier un premier cas d’usage concret.</p>
-            <Link className="dp-button dp-button--light" href="/contact">Planifier une discussion <ArrowRight aria-hidden="true" /></Link>
+            <p className="dp-eyebrow">Préparez mieux le premier échange</p>
+            <h2>Votre prochaine découverte client peut commencer avant l’appel.</h2>
+            <p>Présentez-nous votre processus actuel. Nous vous montrerons comment relier consultation, CRM et automatisations dans un même parcours.</p>
+            <Link className="dp-button dp-button--light" href="/contact">Demander une démo <ArrowRight aria-hidden="true" /></Link>
           </Reveal>
         </div>
       </section>

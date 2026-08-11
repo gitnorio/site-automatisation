@@ -12,8 +12,8 @@ import { siteUrl } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "Astrapio — Intégration IA pour PME", template: "%s | Astrapio" },
-  description: "Astrapio conçoit, développe et intègre des solutions d’intelligence artificielle adaptées aux opérations des PME québécoises.",
+  title: { default: "Astrapio — Discovery, CRM et automatisations", template: "%s | Astrapio" },
+  description: "Astrapio qualifie vos prospects, structure leur brief, synchronise votre CRM et déclenche les automatisations de votre agence.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

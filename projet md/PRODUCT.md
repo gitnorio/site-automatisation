@@ -37,7 +37,9 @@ Le discovery marketing est qualitatif et exploratoire. Une réponse peut mener �
 - IA réellement adaptative;
 - Blueprint contrôlé par l'agence;
 - dossier final structuré;
-- plus tard : documents, CRM, automatisations et analytics.
+- synchronisation des données qualifiées vers le CRM;
+- automatisations simples après la consultation;
+- plus tard : documents, orchestrations complexes et analytics avancés.
 
 L'expérience visuelle est importante, mais elle ne doit jamais être la seule raison d'acheter le produit.
 

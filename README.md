@@ -1,24 +1,71 @@
-# Astrapio
+# Astrapio Discovery
 
-Site vitrine techniquement prêt, rédigé en français québécois, pour présenter les services d’intégration et d’automatisation IA d’Astrapio aux PME.
+SaaS B2B de consultation client interactive par IA, initialement conçu pour les agences marketing boutique et PME.
 
-## Fonctionnalités
+Astrapio intervient avant la consultation humaine. L’agence définit les informations qu’elle doit obtenir dans un **Discovery Blueprint**; le moteur choisit comment les découvrir au moyen de questions adaptatives et produit un brief structuré pour l’équipe de l’agence.
 
-- identité visuelle Windows 95 originale;
-- 17 illustrations pixel art générées pour le projet;
-- accueil complet, galerie de 11 services, méthodologie, à propos, blogue et contact;
-- recherche, filtres, vues cartes/liste et fiches de services partageables;
-- formulaire validé côté client et FastAPI;
-- champ piège, limitation des soumissions et stockage SQLite;
-- métadonnées, sitemap, robots.txt et données structurées;
-- responsive, navigation clavier et animations réduites.
+## Principes produit
 
-## Structure
+- une question principale à la fois;
+- expérience prospect premium, courte et guidée;
+- état de chaque objectif maintenu par le backend;
+- sorties LLM strictement structurées et validées;
+- aucune recommandation marketing donnée au prospect;
+- aucune promesse de prix, délai ou livrable;
+- transition finale vers une consultation humaine.
 
-- `frontend/` — Next.js, React, TypeScript et CSS/Tailwind;
-- `backend/` — FastAPI, Pydantic, SQLAlchemy et SQLite;
-- `PLAN.md` — spécification et critères d’acceptation;
-- `ASSUMPTIONS.md` — décisions à confirmer avant publication.
+## État du projet
+
+La **phase 0** est terminée :
+
+- dépôt et stack audités;
+- architecture Next.js + FastAPI confirmée;
+- SQLite retenu pour le développement MVP, avec compatibilité PostgreSQL visée;
+- OpenAI retenu comme premier fournisseur de production derrière une abstraction remplaçable;
+- fournisseur `mock` retenu pour les tests locaux;
+- contrats Pydantic stricts et JSON Schema définis pour extraction, décision et brief;
+- variables d’environnement documentées.
+
+Le moteur de consultation, les routes publiques et la vue interne ne sont pas encore implémentés.
+
+## Portée MVP
+
+### Inclus
+
+- Blueprint fixe `Agence marketing v1`;
+- lien public de consultation;
+- réponses texte, choix, nombres, budget et échéancier;
+- questions adaptatives;
+- persistance des consultations, objectifs et tours;
+- moteur d’état contrôlé par le backend;
+- intégration LLM avec validation et reprises limitées;
+- logique d’arrêt;
+- Marketing Discovery Brief structuré;
+- synchronisation CRM de base après qualification;
+- automatisations simples déclenchées par le résultat de la consultation;
+- vue interne minimale.
+
+### Hors MVP
+
+- PDF et analyse documentaire;
+- automatisations complexes à plusieurs systèmes;
+- voix et avatar 3D;
+- paiement;
+- multi-verticales;
+- dashboard et analytics avancés;
+- recommandations marketing au prospect.
+
+## Architecture
+
+- `frontend/` — Next.js 16, React 19 et TypeScript;
+- `backend/` — FastAPI, Pydantic et SQLAlchemy;
+- `backend/app/discovery/` — contrats et futures règles du moteur;
+- `backend/app/llm/` — abstraction des fournisseurs LLM;
+- `projet md/` — contexte produit et spécifications de référence;
+- `PLAN.md` — phases d’implémentation du MVP;
+- `ASSUMPTIONS.md` — décisions temporaires et points à confirmer.
+
+Le backend reste l’autorité. Le LLM propose des extractions et décisions structurées, mais n’écrit jamais directement en base et ne contrôle jamais seul une transition irréversible.
 
 ## Configuration
 
@@ -28,12 +75,14 @@ cp .env.example .env
 
 Variables principales :
 
-- `NEXT_PUBLIC_SITE_URL` — adresse publique du frontend;
-- `NEXT_PUBLIC_API_URL` — adresse publique de FastAPI;
-- `CONTACT_DATABASE_URL` — connexion SQLite ou PostgreSQL future;
-- `CORS_ORIGINS` — origines autorisées, séparées par des virgules;
-- `TRUST_PROXY_HEADERS` — active la lecture de `X-Forwarded-For` derrière un proxy maîtrisé;
-- `RATE_LIMIT_MAX_REQUESTS` et `RATE_LIMIT_WINDOW_SECONDS` — paramètres de limitation.
+- `DATABASE_URL` — base principale;
+- `DISCOVERY_LLM_PROVIDER` — `mock` en local ou `openai`;
+- `DISCOVERY_LLM_MODEL` — modèle configuré au déploiement;
+- `OPENAI_API_KEY` — secret serveur, requis avec `openai`;
+- `DISCOVERY_MAX_QUESTIONS` — plafond absolu de questions;
+- `CONSULTATION_TOKEN_SECRET` — secret de signature des futurs liens publics;
+- `NEXT_PUBLIC_SITE_URL` et `NEXT_PUBLIC_API_URL` — adresses publiques;
+- `CORS_ORIGINS` — origines frontend autorisées.
 
 ## Démarrage local
 
@@ -45,7 +94,7 @@ npm install
 npm run dev
 ```
 
-Le site est disponible sur `http://localhost:3000`.
+Frontend : `http://localhost:3000`
 
 ### Backend
 
@@ -56,19 +105,9 @@ python3 -m venv .venv
 .venv/bin/uvicorn app.main:app --reload
 ```
 
-L’API est disponible sur `http://localhost:8000`. Les demandes sont enregistrées dans `backend/data/astrapio.db` par défaut.
+API : `http://localhost:8000`
 
-## Docker Compose
-
-```bash
-docker compose up --build
-```
-
-- Frontend : `http://localhost:3000`
-- Backend : `http://localhost:8000`
-- Santé : `http://localhost:8000/health`
-
-Le volume `contact_data` conserve la base SQLite.
+Documentation locale : `http://localhost:8000/docs`
 
 ## Vérifications
 
@@ -78,31 +117,11 @@ npm run lint
 npm run typecheck
 npm test
 npm run build
-npm run test:e2e
 
 cd ../backend
 .venv/bin/pytest
 ```
 
-## Formulaire de contact
+## Références internes
 
-`POST /api/contact` accepte les champs décrits dans `PLAN.md`. Une réponse valide est enregistrée avec un UUID, un horodatage UTC et le statut `new`.
-
-La limitation actuelle est conservée en mémoire. Pour plusieurs instances backend, remplacer ce mécanisme par un stockage partagé comme Redis.
-
-## Avant publication
-
-- compléter les coordonnées officielles;
-- ajouter le portrait et le parcours réel du fondateur;
-- confirmer les dates des articles;
-- choisir l’acheminement des demandes au-delà de SQLite;
-- faire réviser les conditions d’utilisation par un professionnel connaissant les exigences applicables au Québec;
-- ajouter une politique appropriée si les pratiques de collecte ou les outils utilisés l’exigent;
-- ne déployer aucun outil analytique non essentiel sans mécanisme de consentement approprié.
-
-## Limites connues
-
-- aucune intégration client n’est présentée comme déjà déployée;
-- aucun portail client, assistant RAG ou environnement multi-entreprise n’est inclus;
-- le système de contact ne transmet pas encore de notification par courriel;
-- les illustrations sont des actifs éditoriaux et ne constituent pas des captures de solutions déjà livrées.
+Lire d’abord `projet md/README.md`, puis suivre son ordre de lecture. Les décisions adaptées au dépôt sont consignées dans `projet md/PHASE_0_DECISIONS.md`.

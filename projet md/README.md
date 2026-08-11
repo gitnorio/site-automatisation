@@ -14,9 +14,10 @@ Ce dossier contient le contexte nécessaire pour travailler sur le projet sans d
 8. `ARCHITECTURE.md`
 9. `IMPLEMENTATION_PLAN.md`
 10. `CODEX_RULES.md`
+11. `PHASE_0_DECISIONS.md`
 
 ## Hors MVP
 
-PDF, CRM, voix, avatar 3D, multi-verticales, automatisations complexes, paiement et analytics avancés.
+PDF, voix, avatar 3D, multi-verticales, automatisations complexes, paiement et analytics avancés. Une synchronisation CRM de base et des déclencheurs simples font désormais partie de la portée produit.
 
 La priorité est de prouver que l'interview IA adaptative fonctionne et produit un brief utile pour une agence marketing.

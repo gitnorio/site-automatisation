@@ -21,6 +21,8 @@ Responsabilités :
 - appeler le LLM;
 - valider la sortie;
 - générer le brief final.
+- synchroniser les données autorisées vers un CRM;
+- déclencher et journaliser les automatisations simples.
 
 ## Base de données
 
@@ -37,6 +39,10 @@ interface DiscoveryLLM {
 ```
 
 Ne pas coupler l'application à un fournisseur précis.
+
+## Abstraction CRM et automatisations
+
+Définir une interface de connecteur remplaçable. Le moteur de consultation produit un événement structuré; un service séparé décide des champs autorisés et exécute la synchronisation, la notification ou le webhook. Une erreur d’intégration ne doit jamais invalider le brief final.
 
 ## Sorties structurées
 

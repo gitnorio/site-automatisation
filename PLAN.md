@@ -1,4 +1,4 @@
-# Plan d’implémentation — Astrapio Discovery MVP
+# Plan d’implémentation — Koto Discovery MVP
 
 ## Objectif
 

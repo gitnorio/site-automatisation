@@ -1,5 +1,5 @@
 {
-  "name": "astrapio-frontend",
+  "name": "koto-frontend",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -11,9 +11,12 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "media:generate": "node scripts/generate-koto-videos.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/radio-canada": "^5.3.0",
     "@fontsource/ibm-plex-mono": "5.1.1",
     "@fontsource/vt323": "5.1.1",
     "lucide-react": "0.468.0",

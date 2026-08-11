@@ -1,0 +1,16 @@
+:root {
+  --koto-ink: #241b38;
+  --koto-black: #171126;
+  --koto-paper: #fffcf8;
+  --koto-accent: #ff7a59;
+  --koto-accent-dark: #e95f40;
+  --koto-surface: #f3efff;
+  --koto-line: #e4ddf0;
+  --koto-line-strong: #9b8eaa;
+  --koto-muted: #6e647a;
+  --koto-violet: #6c4cf1;
+  --koto-danger: #a32121;
+  --koto-success: #12633f;
+  --koto-warning: #ffd84d;
+  --koto-width: 1168px;
+}

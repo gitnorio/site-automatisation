@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.discovery.contracts import (
+from app.modules.discovery.contracts import (
     Choice,
     DecisionResult,
     EngineAction,

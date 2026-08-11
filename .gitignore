@@ -10,6 +10,6 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 *.pyc
-backend/data/
+*.egg-info/
+*.tsbuildinfo
 frontend/public/images/pixel-art/source/
-

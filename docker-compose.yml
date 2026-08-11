@@ -1,10 +1,27 @@
 services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-koto}
+      POSTGRES_USER: ${POSTGRES_USER:-koto}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-koto}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/docker/postgres/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-koto} -d ${POSTGRES_DB:-koto}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   backend:
     build:
       context: ./backend
     environment:
       APP_ENV: ${APP_ENV:-development}
-      DATABASE_URL: ${DATABASE_URL:-sqlite:///./data/astrapio.db}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-koto}:${POSTGRES_PASSWORD:-koto}@database:5432/${POSTGRES_DB:-koto}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
       TRUST_PROXY_HEADERS: ${TRUST_PROXY_HEADERS:-false}
       RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-5}
@@ -18,8 +35,9 @@ services:
       CONSULTATION_TOKEN_SECRET: ${CONSULTATION_TOKEN_SECRET:-development-only-secret-change-me}
     ports:
       - "8000:8000"
-    volumes:
-      - contact_data:/app/data
+    depends_on:
+      database:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
       interval: 10s
@@ -42,4 +60,4 @@ services:
         condition: service_healthy
 
 volumes:
-  contact_data:
+  postgres_data:

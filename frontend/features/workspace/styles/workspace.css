@@ -1,0 +1,66 @@
+.enterprise-shell { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0,1fr); color: var(--koto-ink); background: #f7f4fb; font-family: Inter,Arial,sans-serif; }
+.enterprise-sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 28px 20px 22px; color: #fff; background: var(--koto-black); }
+.enterprise-brand { width: 112px; display: block; padding: 4px; filter: brightness(0) invert(1); }
+.enterprise-brand img { width: 100%; height: auto; }
+.enterprise-workspace { display: grid; gap: 5px; margin: 38px 0 24px; padding: 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.11); border-radius: 10px; }
+.enterprise-workspace span,.enterprise-topbar span { color: #aaa0b8; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.enterprise-workspace strong { font-size: .92rem; }
+.enterprise-sidebar nav { display: grid; gap: 6px; }
+.enterprise-sidebar nav a,.enterprise-exit { min-height: 46px; display: flex; align-items: center; gap: 11px; padding: 0 12px; color: #ded7e8; border-radius: 7px; text-decoration: none; font-size: .88rem; }
+.enterprise-sidebar nav a:hover { color: #fff; background: rgba(108,76,241,.3); }
+.enterprise-sidebar svg { width: 18px; }
+.enterprise-exit { margin-top: auto; border: 1px solid rgba(255,255,255,.12); }
+.enterprise-main { min-width: 0; }
+.enterprise-topbar { min-height: 78px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px,4vw,56px); background: var(--koto-paper); border-bottom: 1px solid var(--koto-line); }
+.enterprise-topbar>div { display: grid; gap: 4px; }
+.enterprise-topbar strong { font-size: .9rem; }
+.enterprise-environment { padding: 7px 10px; color: var(--koto-violet)!important; background: var(--koto-surface); border-radius: 99px; font-weight: 700; }
+.enterprise-page { width: min(1120px,calc(100% - 48px)); margin: 0 auto; padding: 64px 0 90px; }
+.enterprise-page__heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
+.enterprise-page__heading>div { max-width: 700px; }
+.enterprise-page__heading span { color: var(--koto-violet); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.enterprise-page h1 { margin: 10px 0 0; font-family: "Radio Canada",Inter,sans-serif; font-size: clamp(2.8rem,5vw,4.6rem); font-weight: 520; letter-spacing: -.055em; line-height: 1; }
+.enterprise-page__heading p { margin: 18px 0 0; color: var(--koto-muted); font-size: 1.05rem; }
+.enterprise-page__heading button,.blueprint-card button { min-height: 48px; display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; color: #8d8498; background: #ebe6f0; border: 0; border-radius: 7px; }
+.enterprise-page__heading button svg,.blueprint-card button svg { width: 17px; }
+.enterprise-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+.enterprise-metrics article { display: grid; gap: 20px; padding: 24px; background: var(--koto-paper); border: 1px solid var(--koto-line); border-radius: 10px; }
+.enterprise-metrics span { color: var(--koto-muted); font-size: .82rem; }
+.enterprise-metrics strong { font-size: 2rem; font-weight: 550; }
+.enterprise-empty { min-height: 360px; display: grid; place-items: center; align-content: center; gap: 12px; margin-top: 24px; padding: 42px; background: var(--koto-paper); border: 1px dashed #cfc5dd; border-radius: 10px; text-align: center; }
+.enterprise-empty>svg { width: 34px; height: 34px; color: var(--koto-violet); }
+.enterprise-empty h2 { margin: 8px 0 0; font-size: 1.45rem; }
+.enterprise-empty p { max-width: 570px; margin: 0; color: var(--koto-muted); }
+.enterprise-empty a { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; color: var(--koto-violet); font-weight: 700; text-decoration: none; }
+.enterprise-empty a svg { width: 16px; }
+.blueprint-card { display: grid; grid-template-columns: 1.25fr .7fr auto; align-items: center; gap: 38px; margin-top: 48px; padding: 36px; background: var(--koto-paper); border: 1px solid var(--koto-line); border-radius: 12px; }
+.blueprint-card h2 { margin: 16px 0 8px; font-size: 1.7rem; }
+.blueprint-card p { margin: 0; color: var(--koto-muted); }
+.enterprise-status { width: max-content; display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; color: var(--koto-violet); background: var(--koto-surface); border-radius: 99px; font-size: .7rem; font-weight: 700; }
+.enterprise-status svg { width: 15px; }
+.blueprint-card__meta { display: grid; gap: 10px; color: var(--koto-muted); font-size: .8rem; }
+.enterprise-settings { display: grid; gap: 22px; margin-top: 48px; padding: 36px; background: var(--koto-paper); border: 1px solid var(--koto-line); border-radius: 12px; }
+.enterprise-settings label { display: grid; gap: 9px; font-size: .82rem; font-weight: 700; }
+.enterprise-settings input,.enterprise-settings select { min-height: 50px; padding: 0 14px; color: var(--koto-ink); background: #faf8fc; border: 1px solid var(--koto-line); border-radius: 6px; }
+.enterprise-logo-placeholder { min-height: 110px; display: grid; place-items: center; color: var(--koto-muted); background: var(--koto-surface); border: 1px dashed #c7bbd9; border-radius: 7px; font-size: 1rem; }
+
+@media(max-width:850px) {
+  .enterprise-shell { grid-template-columns: 1fr; }
+  .enterprise-sidebar { position: static; height: auto; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 18px; padding: 18px 20px; }
+  .enterprise-workspace,.enterprise-exit { display: none; }
+  .enterprise-sidebar nav { display: flex; justify-content: flex-end; overflow-x: auto; }
+  .enterprise-sidebar nav a { white-space: nowrap; }
+  .enterprise-topbar { display: none; }
+  .blueprint-card { grid-template-columns: 1fr; }
+}
+
+@media(max-width:620px) {
+  .enterprise-sidebar { grid-template-columns: 1fr; }
+  .enterprise-sidebar nav { justify-content: flex-start; }
+  .enterprise-sidebar nav a { padding-inline: 8px; font-size: .75rem; }
+  .enterprise-sidebar nav svg { display: none; }
+  .enterprise-page { width: min(100% - 28px,1120px); padding-top: 46px; }
+  .enterprise-page__heading { align-items: flex-start; flex-direction: column; }
+  .enterprise-metrics { grid-template-columns: 1fr; }
+  .enterprise-settings,.blueprint-card { padding: 24px 20px; }
+}

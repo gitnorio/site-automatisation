@@ -54,7 +54,7 @@ Statut : **terminée**.
 
 ## Phase 4 — Expérience prospect
 
-- créer `/consultation/[token]`;
+- créer `/c/[consultationId]` avec un jeton signé ou opaque résolu côté backend;
 - ajouter accueil, progression, question et fin;
 - prendre en charge texte, choix, multi-choix, nombre, budget et échéancier;
 - sauvegarder chaque réponse avant de poursuivre;
@@ -68,6 +68,7 @@ Statut : **terminée**.
 - créer `/app/consultations/[id]`;
 - afficher qualification, objectifs, informations manquantes et contradictions;
 - afficher les réponses brutes sans exposer les traces internes du modèle.
+- conserver l’espace entreprise sous `/app/*`, séparé du site promotionnel public;
 
 ## Phase 5.5 — CRM et automatisations de base
 

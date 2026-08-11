@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import AliasChoices, Field, SecretStr, model_validator
+from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,8 +11,8 @@ class Settings(BaseSettings):
         default="development", alias="APP_ENV"
     )
     database_url: str = Field(
-        default="sqlite:///./data/astrapio.db",
-        validation_alias=AliasChoices("DATABASE_URL", "CONTACT_DATABASE_URL"),
+        default="postgresql+psycopg://koto:koto@localhost:5433/koto",
+        alias="DATABASE_URL",
     )
     cors_origins: str = Field(default="http://localhost:3000", alias="CORS_ORIGINS")
     trust_proxy_headers: bool = Field(default=False, alias="TRUST_PROXY_HEADERS")
@@ -44,6 +44,13 @@ class Settings(BaseSettings):
     @property
     def allowed_origins(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @field_validator("database_url")
+    @classmethod
+    def require_postgresql(cls, value: str) -> str:
+        if not value.startswith(("postgresql://", "postgresql+psycopg://")):
+            raise ValueError("DATABASE_URL doit utiliser PostgreSQL.")
+        return value
 
     @model_validator(mode="after")
     def validate_llm_configuration(self) -> "Settings":

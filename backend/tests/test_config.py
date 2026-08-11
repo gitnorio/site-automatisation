@@ -22,3 +22,8 @@ def test_production_rejects_development_token_secret() -> None:
             DISCOVERY_LLM_PROVIDER="mock",
             CONSULTATION_TOKEN_SECRET="development-only-secret-change-me",
         )
+
+
+def test_sqlite_database_is_rejected() -> None:
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, DATABASE_URL="sqlite:///./data/koto.db")

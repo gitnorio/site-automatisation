@@ -1,30 +1,42 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.contact import router as contact_router
+from app.api.v1.router import api_router
 from app.core.config import get_settings
-from app.core.database import Base, engine
+from app.core.database import initialize_database
 
 
-settings = get_settings()
-Base.metadata.create_all(bind=engine)
+def create_app() -> FastAPI:
+    settings = get_settings()
 
-app = FastAPI(
-    title=settings.app_name,
-    version="1.0.0",
-    docs_url="/docs" if settings.app_name.endswith("API") else None,
-)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.allowed_origins,
-    allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
-)
-app.include_router(contact_router)
+    @asynccontextmanager
+    async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+        initialize_database()
+        yield
+
+    application = FastAPI(
+        title=settings.app_name,
+        version="1.0.0",
+        docs_url="/docs" if settings.app_name.endswith("API") else None,
+        lifespan=lifespan,
+    )
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.allowed_origins,
+        allow_credentials=False,
+        allow_methods=["GET", "POST"],
+        allow_headers=["Content-Type"],
+    )
+    application.include_router(api_router)
+
+    @application.get("/health")
+    def health() -> dict[str, str]:
+        return {"status": "ok"}
+
+    return application
 
 
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
-
+app = create_app()

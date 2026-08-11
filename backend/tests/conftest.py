@@ -1,17 +1,20 @@
 import os
-os.environ["CONTACT_DATABASE_URL"] = "sqlite://"
+os.environ["DATABASE_URL"] = os.getenv(
+    "TEST_DATABASE_URL",
+    "postgresql+psycopg://koto:koto@localhost:5433/koto_test",
+)
 os.environ["RATE_LIMIT_MAX_REQUESTS"] = "5"
 os.environ["RATE_LIMIT_WINDOW_SECONDS"] = "3600"
 
 import pytest
 from fastapi.testclient import TestClient
 
-from app.api.contact import rate_limiter
+from app.modules.contact.router import rate_limiter
 from app.core.database import Base, engine
 from app.main import app
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def clean_database() -> None:
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
@@ -21,7 +24,7 @@ def clean_database() -> None:
 
 
 @pytest.fixture
-def client() -> TestClient:
+def client(clean_database: None) -> TestClient:
     return TestClient(app)
 
 

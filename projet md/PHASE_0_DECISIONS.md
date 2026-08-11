@@ -7,7 +7,7 @@ Statut : terminée le 10 août 2026.
 - **Frontend** : Next.js 16, React 19 et TypeScript pour l’expérience prospect et la vue interne minimale.
 - **Backend** : FastAPI demeure l’autorité sur les consultations, les objectifs, les tours, les règles d’arrêt et la validation des sorties LLM.
 - **Validation** : Pydantic est la source de vérité des contrats backend et produit les JSON Schema nécessaires. Le frontend recevra des types dérivés ou maintenus à sa frontière API lorsque les routes seront ajoutées.
-- **Persistance MVP** : SQLite est conservé en développement afin de livrer rapidement. Les modèles et dépôts SQLAlchemy doivent rester compatibles avec PostgreSQL.
+- **Persistance MVP** : PostgreSQL est utilisé en développement, dans les tests d’intégration et au déploiement. SQLAlchemy reste la couche d’accès aux données.
 - **LLM initial** : OpenAI derrière l’interface `DiscoveryLLM`. Le modèle est configuré par environnement et n’est jamais codé en dur.
 - **Tests** : le fournisseur `mock` est utilisé sans réseau pour les tests du moteur et les scénarios déterministes.
 
@@ -29,7 +29,7 @@ Le LLM ne peut pas :
 
 ## Routage cible
 
-- `/consultation/[token]` : expérience publique du prospect;
+- `/c/[consultationId]` : expérience publique du prospect;
 - `/app/consultations` : liste interne minimale;
 - `/app/consultations/[id]` : brief, réponses et objectifs;
 - `/api/consultations` : création et lecture contrôlée;
@@ -52,7 +52,7 @@ Les routes ne sont pas implémentées en phase 0.
 ## Décisions reportées
 
 - fournisseur d’authentification de la vue agence;
-- migration vers PostgreSQL/Supabase;
+- choix éventuel d’un hébergement PostgreSQL géré, dont Supabase;
 - politique définitive de conservation et suppression;
 - seuils commerciaux de qualification;
 - premier connecteur CRM pilote;

@@ -1,13 +1,15 @@
 import "@fontsource-variable/inter";
 import "@fontsource-variable/radio-canada";
-import "./globals.css";
-import "./koto.css";
+import "./styles/tokens.css";
+import "./styles/base.css";
+import "@/features/contact/styles/contact.css";
+import "@/features/marketing/styles/marketing.css";
+import "@/features/workspace/styles/workspace.css";
+import "@/features/consultation/styles/consultation.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import { siteUrl } from "@/lib/metadata";
 
 export const metadata: Metadata = {
@@ -21,9 +23,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html lang="fr-CA" data-scroll-behavior="smooth">
       <body>
         <a className="skip-link" href="#main-content">Aller au contenu</a>
-        <SiteHeader />
-        <main id="main-content">{children}</main>
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );

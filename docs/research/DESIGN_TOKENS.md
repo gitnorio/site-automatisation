@@ -13,7 +13,7 @@ Audit réalisé le 11 août 2026 sur les pages d’accueil, clients et tarifs de
 - Bordure lilas : `--koto-line: #E4DDF0`.
 - Texte secondaire prune : `--koto-muted: #6E647A`.
 
-Cette palette conserve le contraste et la sobriété du système tout en donnant à Astrapio une signature distincte des interfaces vert menthe du marché.
+Cette palette conserve le contraste et la sobriété du système tout en donnant à Koto une signature distincte des interfaces vert menthe du marché.
 
 ## Typographie
 

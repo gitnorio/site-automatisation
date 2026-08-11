@@ -42,7 +42,7 @@ export function AboutMenu() {
         À propos <ChevronDown size={17} aria-hidden="true" />
       </button>
       {open ? (
-        <div className="about-menu__panel retro-panel" id="about-submenu">
+        <div className="about-menu__panel" id="about-submenu">
           {aboutNavigation.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setOpen(false)}>{item.label}</Link>
           ))}
@@ -51,4 +51,3 @@ export function AboutMenu() {
     </div>
   );
 }
-

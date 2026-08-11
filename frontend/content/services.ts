@@ -10,8 +10,6 @@ export type Service = {
   slug: string;
   title: string;
   shortDescription: string;
-  image: string;
-  imageAlt: string;
   categories: ServiceCategory[];
   problem: string;
   workflow: string[];
@@ -36,8 +34,6 @@ export const services: Service[] = [
     slug: "automatisation-intelligente",
     title: "Automatisation intelligente",
     shortDescription: "Automatisez les tâches répétitives et les processus administratifs qui ralentissent vos équipes.",
-    image: "/images/pixel-art/service-automation.webp",
-    imageAlt: "Chaîne de travail automatisée entre des postes administratifs",
     categories: ["automatisation", "integrations"],
     problem: "Les équipes recopient encore des données, relancent manuellement des demandes et déplacent l’information entre plusieurs outils.",
     workflow: ["Repérer le déclencheur", "Valider les données", "Exécuter les actions", "Signaler les exceptions"],
@@ -51,8 +47,6 @@ export const services: Service[] = [
     slug: "assistants-ia",
     title: "Assistants IA",
     shortDescription: "Aidez vos équipes à préparer des réponses, résumer l’information et accomplir des tâches guidées.",
-    image: "/images/pixel-art/service-ai-assistant.webp",
-    imageAlt: "Employée utilisant un assistant IA dans une interface rétro",
     categories: ["assistants-ia", "sur-mesure"],
     problem: "Les employés consacrent du temps à reformuler les mêmes réponses et à rassembler de l’information dispersée.",
     workflow: ["Recevoir la demande", "Recueillir le contexte autorisé", "Préparer une réponse", "Faire valider au besoin"],
@@ -66,8 +60,6 @@ export const services: Service[] = [
     slug: "bases-de-connaissances",
     title: "Bases de connaissances",
     shortDescription: "Retrouvez rapidement l’information contenue dans vos documents, procédures et politiques autorisés.",
-    image: "/images/pixel-art/service-knowledge.webp",
-    imageAlt: "Bibliothèque de documents reliée à un moteur de recherche intelligent",
     categories: ["connaissances", "documents", "assistants-ia"],
     problem: "Les connaissances utiles sont réparties entre des dossiers, espaces documentaires et procédures difficiles à consulter.",
     workflow: ["Préparer les documents", "Indexer les passages", "Rechercher les sources", "Composer une réponse sourcée"],
@@ -81,8 +73,6 @@ export const services: Service[] = [
     slug: "integration-de-systemes",
     title: "Intégration de systèmes",
     shortDescription: "Connectez l’IA à vos courriels, CRM, bases de données, espaces documentaires et logiciels internes.",
-    image: "/images/pixel-art/service-integration.webp",
-    imageAlt: "Plusieurs logiciels reliés par des flux de données lumineux",
     categories: ["integrations", "sur-mesure"],
     problem: "Les logiciels ne communiquent pas toujours entre eux et obligent les équipes à transférer l’information manuellement.",
     workflow: ["Cartographier les systèmes", "Choisir le mode d’accès", "Transformer les données", "Surveiller les échanges"],
@@ -96,8 +86,6 @@ export const services: Service[] = [
     slug: "developpement-sur-mesure",
     title: "Développement sur mesure",
     shortDescription: "Développez une solution adaptée lorsque les produits existants ne répondent pas à votre réalité.",
-    image: "/images/pixel-art/service-custom.webp",
-    imageAlt: "Atelier numérique assemblant une application personnalisée",
     categories: ["sur-mesure", "integrations"],
     problem: "Un processus important ne correspond pas aux limites des produits standards ou exige une interface propre à l’entreprise.",
     workflow: ["Définir le besoin", "Prototyper", "Développer", "Tester et déployer"],
@@ -111,8 +99,6 @@ export const services: Service[] = [
     slug: "demandes-de-soumission",
     title: "Traitement des demandes de soumission",
     shortDescription: "Transformez une demande reçue en dossier structuré et en brouillon prêt à valider.",
-    image: "/images/pixel-art/service-quotes.webp",
-    imageAlt: "Courriel de soumission converti en dossier structuré",
     categories: ["automatisation", "documents", "integrations"],
     problem: "Les demandes arrivent dans différents formats et doivent être lues, vérifiées puis recopiées dans plusieurs systèmes.",
     workflow: ["Analyser la demande", "Extraire les renseignements", "Détecter les manques", "Préparer le dossier et la réponse"],
@@ -126,8 +112,6 @@ export const services: Service[] = [
     slug: "classement-des-courriels",
     title: "Analyse et classement des courriels",
     shortDescription: "Classez les messages, repérez les priorités et acheminez les demandes vers la bonne équipe.",
-    image: "/images/pixel-art/service-email.webp",
-    imageAlt: "Boîte de réception classée automatiquement par catégories",
     categories: ["automatisation", "documents"],
     problem: "Les boîtes partagées reçoivent un volume de messages difficile à trier et à distribuer de façon constante.",
     workflow: ["Lire le message", "Identifier le sujet", "Extraire les données utiles", "Acheminer avec une priorité"],
@@ -141,8 +125,6 @@ export const services: Service[] = [
     slug: "extraction-de-documents",
     title: "Extraction de données de documents",
     shortDescription: "Transformez factures, formulaires et rapports en données structurées à faire vérifier.",
-    image: "/images/pixel-art/service-documents.webp",
-    imageAlt: "Données extraites de factures vers un tableau structuré",
     categories: ["documents", "automatisation"],
     problem: "Des renseignements utiles restent enfermés dans des PDF, images ou documents hétérogènes.",
     workflow: ["Recevoir le document", "Reconnaître sa structure", "Extraire les champs", "Valider et exporter"],
@@ -156,8 +138,6 @@ export const services: Service[] = [
     slug: "generation-de-rapports",
     title: "Génération de rapports",
     shortDescription: "Rassemblez les données disponibles et préparez des rapports répétitifs à réviser.",
-    image: "/images/pixel-art/service-reports.webp",
-    imageAlt: "Données de plusieurs systèmes assemblées dans un rapport",
     categories: ["automatisation", "documents", "integrations"],
     problem: "Les rapports périodiques demandent de recueillir manuellement les mêmes données et de répéter les mêmes mises en forme.",
     workflow: ["Collecter les données", "Vérifier les valeurs", "Composer le rapport", "Soumettre pour approbation"],
@@ -171,8 +151,6 @@ export const services: Service[] = [
     slug: "synchronisation-logiciels",
     title: "Synchronisation entre logiciels",
     shortDescription: "Gardez les renseignements cohérents entre vos systèmes sans effectuer chaque transfert à la main.",
-    image: "/images/pixel-art/service-sync.webp",
-    imageAlt: "Deux logiciels synchronisant leurs dossiers clients",
     categories: ["integrations", "automatisation"],
     problem: "Un même client ou dossier possède des données différentes selon le logiciel consulté.",
     workflow: ["Détecter le changement", "Valider le format", "Mettre à jour la cible", "Signaler les conflits"],
@@ -186,8 +164,6 @@ export const services: Service[] = [
     slug: "assistant-soutien-interne",
     title: "Assistant de soutien interne",
     shortDescription: "Aidez les employés à retrouver une procédure et à préparer la prochaine action.",
-    image: "/images/pixel-art/service-support.webp",
-    imageAlt: "Employé consultant une réponse avec ses sources dans un assistant interne",
     categories: ["assistants-ia", "connaissances"],
     problem: "Les équipes sollicitent toujours les mêmes spécialistes pour retrouver des procédures ou résoudre des questions courantes.",
     workflow: ["Recevoir la question", "Rechercher les sources autorisées", "Répondre avec références", "Escalader si nécessaire"],
@@ -202,4 +178,3 @@ export const services: Service[] = [
 export function getService(slug: string) {
   return services.find((service) => service.slug === slug);
 }
-

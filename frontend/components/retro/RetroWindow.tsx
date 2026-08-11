@@ -20,14 +20,9 @@ export function RetroWindow({
     <section className={`retro-window ${className}`}>
       <div className="retro-titlebar">
         <Heading className="retro-titlebar__title">{title}</Heading>
-        {controls ? (
-          <div className="retro-titlebar__controls" aria-hidden="true">
-            <span>_</span><span>□</span><span>×</span>
-          </div>
-        ) : null}
+        {controls ? <span className="section-index" aria-hidden="true">Astrapio</span> : null}
       </div>
       <div className="retro-window__body">{children}</div>
     </section>
   );
 }
-

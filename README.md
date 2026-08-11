@@ -1,8 +1,8 @@
-# Astrapio Discovery
+# Koto Discovery
 
 SaaS B2B de consultation client interactive par IA, initialement conçu pour les agences marketing boutique et PME.
 
-Astrapio intervient avant la consultation humaine. L’agence définit les informations qu’elle doit obtenir dans un **Discovery Blueprint**; le moteur choisit comment les découvrir au moyen de questions adaptatives et produit un brief structuré pour l’équipe de l’agence.
+Koto intervient avant la consultation humaine. L’agence définit les informations qu’elle doit obtenir dans un **Discovery Blueprint**; le moteur choisit comment les découvrir au moyen de questions adaptatives et produit un brief structuré pour l’équipe de l’agence.
 
 ## Principes produit
 

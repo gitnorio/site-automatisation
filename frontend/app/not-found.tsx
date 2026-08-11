@@ -1,5 +1,5 @@
-import { RetroButton } from "@/components/retro/RetroButton";
-import { RetroWindow } from "@/components/retro/RetroWindow";
+import Link from "next/link";
 
-export default function NotFound() { return <div className="page-shell"><RetroWindow title="Erreur 404 — Fichier introuvable" headingLevel="h1" controls><h2 className="section-heading">Cette page n’existe pas.</h2><p className="section-lede">Le lien est peut-être incomplet ou la destination a été déplacée.</p><div className="button-row"><RetroButton href="/" variant="primary">Retour à l’accueil</RetroButton><RetroButton href="/services">Explorer les services</RetroButton></div></RetroWindow></div>; }
-
+export default function NotFound() {
+  return <section className="koto-not-found"><p className="koto-pill-label">Erreur 404</p><h1>Cette page n’existe plus.</h1><p>Le projet Koto a été simplifié et cette ancienne destination a été retirée.</p><div className="koto-action-row"><Link className="koto-button koto-button--dark" href="/">Retour à l’accueil</Link><Link className="koto-outline-link" href="/contact">Nous contacter</Link></div></section>;
+}

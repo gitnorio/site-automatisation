@@ -1,7 +1,7 @@
+import "@fontsource-variable/inter";
+import "@fontsource-variable/radio-canada";
 import "./globals.css";
-import "./dominium.css";
-import "./dominium-sections.css";
-import "./dominium-responsive.css";
+import "./koto.css";
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -12,8 +12,8 @@ import { siteUrl } from "@/lib/metadata";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "Astrapio — Discovery, CRM et automatisations", template: "%s | Astrapio" },
-  description: "Astrapio qualifie vos prospects, structure leur brief, synchronise votre CRM et déclenche les automatisations de votre agence.",
+  title: { default: "Koto — Découverte client, CRM et automatisations", template: "%s | Koto" },
+  description: "Koto mène une consultation client adaptative, structure le brief, synchronise votre CRM et déclenche la suite de vos opérations.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

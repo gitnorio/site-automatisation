@@ -11,7 +11,7 @@ export function pageMetadata(title: string, description: string, path: string): 
     openGraph: {
       type: "website",
       locale: "fr_CA",
-      siteName: "Astrapio",
+      siteName: "Koto",
       title,
       description,
       url: canonical,
@@ -20,4 +20,3 @@ export function pageMetadata(title: string, description: string, path: string): 
 }
 
 export { siteUrl };
-

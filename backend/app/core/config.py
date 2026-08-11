@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Astrapio Discovery API"
+    app_name: str = "Koto Discovery API"
     app_env: Literal["development", "test", "production"] = Field(
         default="development", alias="APP_ENV"
     )

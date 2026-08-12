@@ -123,6 +123,8 @@ Signaux :
 - autorité décisionnelle;
 - adéquation avec les services de l'agence.
 
+Hypothèse pilote vérifiable : une fourchette dont le maximum est inférieur à **2 500 $ CA** est `unqualified` lorsque tous les objectifs obligatoires sont confirmés. Une contradiction ou une information obligatoire manquante demeure `follow_up`. Ce seuil devra être validé pendant les tests terrain.
+
 ## 6. Fin de consultation
 
 La consultation se termine lorsque tous les objectifs obligatoires sont `confirmed`.
@@ -130,3 +132,18 @@ La consultation se termine lorsque tous les objectifs obligatoires sont `confirm
 Plafond initial recommandé : 10 à 14 questions.
 
 Le prospect peut quitter à tout moment. Les éléments manquants sont alors marqués incomplets dans le dossier final.
+
+## 7. Préparation de la deuxième entrevue
+
+Le rapport final est destiné à l'agence, pas au prospect. Il doit lui permettre de préparer rapidement la prochaine conversation sans relire toutes les réponses brutes.
+
+Le backend sélectionne de 3 à 8 sujets selon cet ordre :
+
+1. contradictions;
+2. informations obligatoires partielles ou manquantes;
+3. informations optionnelles utiles mais incomplètes;
+4. approfondissements de faits confirmés si moins de trois questions ont été retenues.
+
+Chaque question conserve un sujet, une priorité et une origine déterminés par le backend. Le LLM peut reformuler la question et sa raison, mais ne peut ni changer le besoin détecté, ni ajouter une recommandation marketing. Si le LLM échoue, la formulation déterministe est utilisée.
+
+La fiche agence affiche la raison de chaque question et peut être imprimée ou enregistrée en PDF depuis le navigateur. Les réponses brutes, traces internes et journaux d'automatisation sont exclus du document imprimé.

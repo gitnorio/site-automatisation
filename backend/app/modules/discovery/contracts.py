@@ -34,6 +34,18 @@ class ObjectiveState(StrEnum):
     INCOMPLETE = "incomplete"
 
 
+class ConsultationStatus(StrEnum):
+    NOT_STARTED = "not_started"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    ABANDONED = "abandoned"
+
+
+class ObjectiveSource(StrEnum):
+    ANSWER = "answer"
+    SYSTEM = "system"
+
+
 class ResponseType(StrEnum):
     TEXT = "text"
     SINGLE_CHOICE = "single_choice"
@@ -63,11 +75,24 @@ class QualificationLevel(StrEnum):
     UNQUALIFIED = "unqualified"
 
 
+class RecommendedQuestionPriority(StrEnum):
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+
+
+class RecommendedQuestionSource(StrEnum):
+    MISSING = "missing"
+    PARTIAL = "partial"
+    CONTRADICTION = "contradiction"
+    DEEPENING = "deepening"
+
+
 class BlueprintObjective(StrictContract):
     key: ObjectiveKey
     required: bool
     expected_information: str = Field(min_length=1, max_length=500)
-    imposed_question: str | None = Field(default=None, max_length=500)
+    imposed_question: str | None = Field(default=None, min_length=1, max_length=500)
 
 
 class BlueprintConfig(StrictContract):
@@ -104,19 +129,50 @@ class ExtractionInput(StrictContract):
     target_objective: ObjectiveKey
     question: str = Field(min_length=1, max_length=500)
     answer: str | int | float | list[str]
-    objectives: list[ObjectiveSnapshot]
+    objectives: list[ObjectiveSnapshot] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_extraction_context(self) -> "ExtractionInput":
+        if isinstance(self.answer, str) and not self.answer.strip():
+            raise ValueError("La réponse ne peut pas être vide.")
+        if isinstance(self.answer, list) and not self.answer:
+            raise ValueError("La réponse multiple ne peut pas être vide.")
+        objective_keys = [objective.key for objective in self.objectives]
+        if len(objective_keys) != len(set(objective_keys)):
+            raise ValueError("Les objectifs d'extraction doivent être uniques.")
+        if self.target_objective not in objective_keys:
+            raise ValueError("L'objectif ciblé doit être présent dans le contexte.")
+        return self
 
 
 class ExtractionResult(StrictContract):
     updates: list[ExtractedUpdate]
     detected_contradictions: list[ObjectiveKey] = Field(default_factory=list)
 
+    @model_validator(mode="after")
+    def validate_unique_updates(self) -> "ExtractionResult":
+        update_keys = [update.objective for update in self.updates]
+        if len(update_keys) != len(set(update_keys)):
+            raise ValueError("Chaque objectif extrait doit être unique.")
+        if len(self.detected_contradictions) != len(set(self.detected_contradictions)):
+            raise ValueError("Chaque contradiction détectée doit être unique.")
+        return self
+
 
 class DecisionInput(StrictContract):
     consultation_id: str = Field(min_length=1, max_length=80)
     question_count: int = Field(ge=0)
     max_questions: int = Field(ge=1)
-    objectives: list[ObjectiveSnapshot]
+    objectives: list[ObjectiveSnapshot] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_decision_context(self) -> "DecisionInput":
+        if self.question_count > self.max_questions:
+            raise ValueError("Le nombre de questions dépasse le plafond.")
+        objective_keys = [objective.key for objective in self.objectives]
+        if len(objective_keys) != len(set(objective_keys)):
+            raise ValueError("Les objectifs de décision doivent être uniques.")
+        return self
 
 
 class DecisionResult(StrictContract):
@@ -134,6 +190,11 @@ class DecisionResult(StrictContract):
                 raise ValueError("Une décision ask exige un objectif, une question et un type de réponse.")
             if self.response_type in {ResponseType.SINGLE_CHOICE, ResponseType.MULTI_CHOICE} and not self.choices:
                 raise ValueError("Une question à choix exige au moins une option.")
+            if self.response_type not in {
+                ResponseType.SINGLE_CHOICE,
+                ResponseType.MULTI_CHOICE,
+            } and self.choices:
+                raise ValueError("Seules les questions à choix peuvent contenir des options.")
         if self.action == EngineAction.COMPLETE:
             if self.target_objective or self.question or self.response_type or self.choices:
                 raise ValueError("Une décision complete ne doit contenir aucune question.")
@@ -169,6 +230,14 @@ class QualificationBrief(StrictContract):
     reasons: list[str] = Field(min_length=1)
 
 
+class RecommendedQuestion(StrictContract):
+    topic: ObjectiveKey
+    question: str = Field(min_length=1, max_length=500)
+    reason: str = Field(min_length=1, max_length=500)
+    priority: RecommendedQuestionPriority
+    source: RecommendedQuestionSource
+
+
 class MarketingDiscoveryBrief(StrictContract):
     company: CompanyBrief
     primary_goal: str | None = None
@@ -183,12 +252,34 @@ class MarketingDiscoveryBrief(StrictContract):
     missing_information: list[ObjectiveKey] = Field(default_factory=list)
     contradictions: list[ObjectiveKey] = Field(default_factory=list)
     important_notes: list[str] = Field(default_factory=list)
+    recommended_questions: list[RecommendedQuestion] = Field(
+        default_factory=list,
+        max_length=8,
+    )
+
+    @model_validator(mode="after")
+    def validate_unique_objective_lists(self) -> "MarketingDiscoveryBrief":
+        if len(self.missing_information) != len(set(self.missing_information)):
+            raise ValueError("Les informations manquantes doivent être uniques.")
+        if len(self.contradictions) != len(set(self.contradictions)):
+            raise ValueError("Les contradictions du brief doivent être uniques.")
+        question_topics = [question.topic for question in self.recommended_questions]
+        if len(question_topics) != len(set(question_topics)):
+            raise ValueError("Chaque sujet de question recommandée doit être unique.")
+        return self
 
 
 class BriefInput(StrictContract):
     consultation_id: str = Field(min_length=1, max_length=80)
     completed_at: datetime | None = None
-    objectives: list[ObjectiveSnapshot]
+    objectives: list[ObjectiveSnapshot] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_unique_objectives(self) -> "BriefInput":
+        objective_keys = [objective.key for objective in self.objectives]
+        if len(objective_keys) != len(set(objective_keys)):
+            raise ValueError("Les objectifs du brief doivent être uniques.")
+        return self
 
 
 def contract_json_schemas() -> dict[str, dict[str, object]]:

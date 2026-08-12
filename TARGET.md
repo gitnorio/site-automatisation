@@ -2,7 +2,7 @@
 
 ## URL
 <!-- Replace with the URL of the website you're reverse-engineering -->
-https://dominiumpilot.com/
+https://www.makipeople.com/
 
 ## Scope
 

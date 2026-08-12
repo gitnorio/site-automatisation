@@ -1,0 +1,1 @@
+"""Connecteurs d'automatisation remplaçables."""

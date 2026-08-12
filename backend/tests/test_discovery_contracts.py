@@ -5,7 +5,10 @@ from app.modules.discovery.contracts import (
     Choice,
     DecisionResult,
     EngineAction,
+    MarketingDiscoveryBrief,
     ObjectiveKey,
+    QualificationBrief,
+    QualificationLevel,
     ReasonCode,
     ResponseType,
     contract_json_schemas,
@@ -54,3 +57,15 @@ def test_contracts_export_json_schema() -> None:
 
     assert "decision_result" in schemas
     assert schemas["marketing_discovery_brief"]["type"] == "object"
+
+
+def test_legacy_brief_without_recommended_questions_remains_valid() -> None:
+    brief = MarketingDiscoveryBrief(
+        company={},
+        qualification=QualificationBrief(
+            level=QualificationLevel.FOLLOW_UP,
+            reasons=["Information à compléter."],
+        ),
+    )
+
+    assert brief.recommended_questions == []

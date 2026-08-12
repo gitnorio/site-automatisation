@@ -54,7 +54,7 @@ Les routes ne sont pas implémentées en phase 0.
 - fournisseur d’authentification de la vue agence;
 - choix éventuel d’un hébergement PostgreSQL géré, dont Supabase;
 - politique définitive de conservation et suppression;
-- seuils commerciaux de qualification;
+- seuils commerciaux définitifs au-delà de l’hypothèse pilote de 2 500 $ CA;
 - premier connecteur CRM pilote;
 - documents, paiement, automatisations complexes et analytics avancés.
 

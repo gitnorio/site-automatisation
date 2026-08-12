@@ -15,6 +15,8 @@ Ce dossier contient le contexte nécessaire pour travailler sur le projet sans d
 9. `IMPLEMENTATION_PLAN.md`
 10. `CODEX_RULES.md`
 11. `PHASE_0_DECISIONS.md`
+12. `PHASE_6_SCENARIOS.md`
+13. `PHASE_7_FIELD_TESTS.md`
 
 ## Hors MVP
 

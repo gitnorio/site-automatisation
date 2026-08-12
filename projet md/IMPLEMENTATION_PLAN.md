@@ -38,6 +38,8 @@ Créer l’interface de connecteur, un premier connecteur pilote, la corresponda
 
 ## Phase 6 — scénarios de test
 
+Statut : **terminée le 11 août 2026**.
+
 Tester au minimum :
 - prospect cherche plus de leads et fait peu de marketing;
 - prospect fait beaucoup de Meta Ads mais le ROAS baisse;
@@ -47,6 +49,12 @@ Tester au minimum :
 - réponses vagues;
 - abandon avant la fin.
 
+Voir `PHASE_6_SCENARIOS.md` pour les résultats attendus et les invariants vérifiés.
+
 ## Phase 7 — tests terrain
 
+Statut : **dispositif prêt le 11 août 2026; campagne réelle à mener**.
+
 Ne pas ajouter PDF, avatar, voix ou automatisations complexes avant d'avoir observé de vraies consultations.
+
+Le carnet de preuves, la fiche d’évaluation et le protocole sont disponibles. Voir `PHASE_7_FIELD_TESTS.md`.

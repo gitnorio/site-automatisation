@@ -35,9 +35,12 @@ Les **phases 0 à 6**, le refactoring structurel et le dispositif de la phase 7 
 - expérience `/c/[consultationId]` adaptative, accessible et responsive;
 - six formats de réponse pris en charge : texte, choix, multi-choix, nombre, budget et échéancier;
 - brief structuré généré pour les consultations terminées ou interrompues;
+- questions de précision pour la deuxième entrevue, détectées par règles et formulées par le LLM;
+- repli déterministe du brief et des questions si la génération OpenAI échoue;
 - API interne protégée qui n’expose ni confiance, ni source, ni traces du modèle;
 - liste agence avec progression, statut et qualification;
 - dossier agence avec synthèse, objectifs complets ou incomplets et réponses brutes;
+- fiche agence imprimable ou enregistrable en PDF depuis le navigateur;
 - connecteur d’automatisation remplaçable avec webhook pilote signé par HMAC;
 - liste blanche stricte des données CRM, sans réponse brute ni trace interne du modèle;
 - actions simples de dossier CRM, assignation, notification et webhook;
@@ -69,13 +72,15 @@ Le parcours prospect, la vue agence, le pilote d’automatisation, les scénario
 - intégration LLM avec validation et reprises limitées;
 - logique d’arrêt;
 - Marketing Discovery Brief structuré;
+- feuille de conduite de 3 à 8 questions recommandées pour la deuxième entrevue;
+- export du rapport par impression PDF dans l’espace agence;
 - synchronisation CRM de base après qualification;
 - automatisations simples déclenchées par le résultat de la consultation;
 - vue interne minimale.
 
 ### Hors MVP
 
-- PDF et analyse documentaire;
+- génération PDF côté serveur et analyse documentaire;
 - automatisations complexes à plusieurs systèmes;
 - voix et avatar 3D;
 - paiement;
@@ -189,7 +194,11 @@ PostgreSQL est exposé localement sur le port `5433` afin d’éviter les confli
 
 Le fournisseur `mock` ne réalise aucun appel réseau. Le fournisseur OpenAI utilise la Responses API, des sorties Pydantic structurées, `store=false` et un identifiant de sécurité pseudonymisé. Le modèle demeure configurable par environnement.
 
+La préparation de la deuxième entrevue est hybride : le backend choisit les sujets, priorités et origines des questions; OpenAI peut en améliorer la formulation. Si la génération du brief échoue, Koto enregistre automatiquement la version déterministe. Sans clé OpenAI, utilisez `DISCOVERY_LLM_PROVIDER=mock` pour tester tout le parcours sans coût réseau.
+
 Le connecteur d’automatisation reste désactivé par défaut. Lorsqu’il est activé, chaque événement possède une clé d’idempotence et une signature HMAC; seules les données du contrat CRM autorisé quittent Koto. Les résultats et reprises sont visibles dans le dossier agence, mais l’URL et le secret demeurent exclusivement côté serveur.
+
+Le webhook `consultation.ready` utilise maintenant le schéma `2`. Son bloc `crm_fields` inclut `report_version`, `recommended_questions`, `missing_information` et `contradictions`, en plus des champs de qualification existants. Chaque question contient son sujet, son texte, sa raison, sa priorité et son origine.
 
 La qualification MVP est recalculée et validée par le backend. Le seuil budgétaire pilote est fixé provisoirement à **2 500 $ CA** pour rendre le scénario « budget incompatible » vérifiable; il devra être confirmé ou rendu configurable avec les agences pendant la campagne terrain.
 

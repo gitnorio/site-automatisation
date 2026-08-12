@@ -26,6 +26,10 @@ BRIEF_INSTRUCTIONS = """
 Tu transformes les faits structurés d'une consultation en brief factuel pour une agence.
 N'invente rien et reprends chaque fait textuel depuis les valeurs fournies. Distingue
 clairement les informations manquantes et les contradictions.
+Le payload contient aussi question_requirements, calculé par le backend. Reprends chaque
+exigence une seule fois, dans le même ordre, en conservant exactement topic, priority et
+source. Tu peux reformuler question et reason en français naturel pour préparer la deuxième
+entrevue, sans ajouter de fait, d'hypothèse ou de recommandation stratégique.
 Ne donne aucune recommandation marketing, de canal, de fournisseur ou de budget.
 Ne critique aucune agence et ne promets aucun prix, délai ou livrable.
 """.strip()

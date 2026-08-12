@@ -5,10 +5,12 @@ from app.modules.discovery.contracts import (
     ConsultationStatus,
     MarketingDiscoveryBrief,
     ObjectiveKey,
+    ObjectiveSnapshot,
     ObjectiveState,
     QualificationLevel,
     ResponseType,
 )
+from app.modules.discovery.brief import build_recommended_questions
 from app.modules.discovery.models import (
     ConsultationModel,
     ConsultationObjectiveModel,
@@ -166,7 +168,27 @@ class WorkspaceQueryService:
 def _brief(record: ConsultationModel) -> MarketingDiscoveryBrief | None:
     if record.brief is None:
         return None
-    return MarketingDiscoveryBrief.model_validate(record.brief.brief_json)
+    brief = MarketingDiscoveryBrief.model_validate(record.brief.brief_json)
+    if brief.recommended_questions:
+        return brief
+    blueprint = BlueprintConfig.model_validate(record.blueprint.config)
+    objectives_by_key = {
+        ObjectiveKey(objective.objective_key): objective
+        for objective in record.objectives
+    }
+    snapshots = [
+        ObjectiveSnapshot(
+            key=objective.key,
+            required=objective.required,
+            state=ObjectiveState(objectives_by_key[objective.key].state),
+            value=objectives_by_key[objective.key].value_json,
+            confidence=objectives_by_key[objective.key].confidence,
+        )
+        for objective in blueprint.objectives
+        if objective.key in objectives_by_key
+    ]
+    brief.recommended_questions = build_recommended_questions(snapshots)
+    return brief
 
 
 def _primary_goal(record: ConsultationModel) -> str | None:

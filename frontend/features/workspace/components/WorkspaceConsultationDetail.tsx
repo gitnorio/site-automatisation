@@ -1,4 +1,4 @@
-import { ArrowLeft, Bell, Check, CircleAlert, Clock3, DatabaseZap, FileText, MessageSquareText, RefreshCw, Target, UserRoundCheck, Webhook } from "lucide-react";
+import { ArrowLeft, Bell, Check, CircleAlert, Clock3, DatabaseZap, FileText, ListChecks, MessageSquareText, RefreshCw, Target, UserRoundCheck, Webhook } from "lucide-react";
 import Link from "next/link";
 
 import type {
@@ -6,9 +6,11 @@ import type {
   WorkspaceBrief,
   WorkspaceConsultationDetail,
   WorkspaceAutomationDelivery,
+  WorkspaceRecommendedQuestion,
 } from "@/features/workspace/api/workspace";
 import { AutomationBadge, QualificationBadge, StatusBadge } from "@/features/workspace/components/WorkspaceConsultations";
 import { FieldTestReviewForm } from "@/features/workspace/components/FieldTestReviewForm";
+import { PrintBriefButton } from "@/features/workspace/components/PrintBriefButton";
 
 
 const objectiveLabels: Record<string, string> = {
@@ -42,11 +44,23 @@ export function WorkspaceConsultationDetailView({ data }: { data: WorkspaceConsu
     <section className="enterprise-page enterprise-detail">
       <Link className="enterprise-back" href="/app/consultations"><ArrowLeft aria-hidden="true" /> Toutes les consultations</Link>
       <header className="enterprise-detail__hero">
-        <div><span>Dossier de découverte</span><h1>{title}</h1><p>{data.brief?.primary_goal ?? "Le prospect n’a pas encore précisé son objectif principal."}</p></div>
-        <div className="enterprise-detail__hero-meta"><StatusBadge status={data.status} />{data.brief ? <QualificationBadge level={data.brief.qualification.level} /> : null}<small>Créée le {formatDate(data.created_at)}</small></div>
+        <div><span>Préparation de la deuxième entrevue</span><h1>{title}</h1><p>{data.brief?.primary_goal ?? "Le prospect n’a pas encore précisé son objectif principal."}</p></div>
+        <div className="enterprise-detail__hero-meta">
+          <StatusBadge status={data.status} />
+          {data.brief ? <QualificationBadge level={data.brief.qualification.level} /> : null}
+          <small>Créée le {formatDate(data.created_at)}</small>
+          {data.brief ? <PrintBriefButton /> : null}
+        </div>
       </header>
 
-      {data.brief ? <BriefOverview brief={data.brief} /> : <PendingBrief status={data.status} />}
+      {data.brief ? (
+        <BriefOverview
+          brief={data.brief}
+          consultationId={data.id}
+          generatedAt={data.completed_at ?? data.created_at}
+          organizationName={data.organization_name}
+        />
+      ) : <PendingBrief status={data.status} />}
       <AutomationOverview automations={data.automations} />
       {data.brief ? <FieldTestReviewForm consultationId={data.id} review={data.field_test_review} /> : null}
 
@@ -112,25 +126,73 @@ function AutomationOverview({ automations }: { automations: WorkspaceAutomationD
   );
 }
 
-function BriefOverview({ brief }: { brief: WorkspaceBrief }) {
+function BriefOverview({
+  brief,
+  consultationId,
+  generatedAt,
+  organizationName,
+}: {
+  brief: WorkspaceBrief;
+  consultationId: string;
+  generatedAt: string;
+  organizationName: string;
+}) {
   const attentionItems = [...brief.missing_information, ...brief.contradictions];
   return (
     <div className="brief-layout">
       <section className="brief-feature">
-        <div className="brief-feature__label"><FileText aria-hidden="true" /><span>Brief généré</span></div>
+        <div className="brief-feature__label"><FileText aria-hidden="true" /><span>Fiche de préparation</span></div>
         <h2>{brief.primary_goal ?? "Objectif principal à confirmer"}</h2>
         <p>{brief.trigger_problem ?? "Aucun élément déclencheur n’a été formulé."}</p>
         <dl><BriefField label="Service recherché" value={brief.service_sought} /><BriefField label="Budget" value={brief.budget} /><BriefField label="Échéancier" value={brief.timeline} /><BriefField label="Clientèle cible" value={brief.company.target_customer} /></dl>
+        <div className="brief-print-meta">
+          <span>Préparé pour {organizationName}</span>
+          <span>Dossier #{consultationId.slice(0, 8).toUpperCase()}</span>
+          <span>{formatDate(generatedAt)}</span>
+        </div>
       </section>
       <aside className="brief-sidebar">
         <div className="brief-qualification"><span>Qualification</span><QualificationBadge level={brief.qualification.level} />{brief.qualification.reasons.map((reason) => <p key={reason}>{reason}</p>)}</div>
         <div className="brief-attention"><div><CircleAlert aria-hidden="true" /><span>À préparer pour l’échange</span></div>{attentionItems.length ? <ul>{attentionItems.map((item) => <li key={item}>{objectiveLabels[item] ?? item}</li>)}</ul> : <p>Aucun point obligatoire à clarifier.</p>}</div>
       </aside>
+      <RecommendedQuestions questions={brief.recommended_questions} />
       <section className="brief-context">
         <h2>Contexte opérationnel</h2>
         <div><ContextBlock title="Marketing actuel" values={brief.current_marketing?.channels ?? []} fallback="Aucun canal précisé" /><ContextBlock title="Outils" values={brief.current_marketing?.tools ?? []} fallback="Aucun outil précisé" /><ContextBlock title="Expérience agence" values={brief.previous_agency_experience ? [brief.previous_agency_experience] : []} fallback="Non précisée" /><ContextBlock title="Décision" values={brief.decision?.respondent_role ? [brief.decision.respondent_role] : []} fallback="Processus non précisé" /></div>
       </section>
     </div>
+  );
+}
+
+function RecommendedQuestions({ questions }: { questions: WorkspaceRecommendedQuestion[] }) {
+  return (
+    <section className="brief-questions">
+      <header>
+        <div><ListChecks aria-hidden="true" /><span>Feuille de conduite</span></div>
+        <div><h2>Questions recommandées</h2><p>À poser pendant la deuxième entrevue pour préciser le mandat.</p></div>
+      </header>
+      {questions.length ? (
+        <ol>
+          {questions.map((question, index) => (
+            <li key={question.topic}>
+              <span className="brief-question__number">{String(index + 1).padStart(2, "0")}</span>
+              <article>
+                <div className="brief-question__meta">
+                  <span>{objectiveLabels[question.topic] ?? question.topic}</span>
+                  <span className={`brief-question__priority brief-question__priority--${question.priority}`}>
+                    {questionPriorityLabel(question.priority)}
+                  </span>
+                </div>
+                <h3>{question.question}</h3>
+                <p><strong>Pourquoi :</strong> {question.reason}</p>
+              </article>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="brief-questions__empty">Ce dossier existant ne contient pas encore de questions recommandées.</p>
+      )}
+    </section>
   );
 }
 
@@ -167,4 +229,9 @@ function automationActionLabel(action: string): string {
     "webhook.deliver": "Livrer le webhook signé",
   };
   return labels[action] ?? action;
+}
+
+function questionPriorityLabel(priority: WorkspaceRecommendedQuestion["priority"]): string {
+  const labels = { high: "Priorité haute", medium: "Priorité moyenne", low: "À approfondir" };
+  return labels[priority];
 }

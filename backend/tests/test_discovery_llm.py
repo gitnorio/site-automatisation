@@ -1,4 +1,5 @@
 import asyncio
+import json
 from types import SimpleNamespace
 
 import pytest
@@ -8,6 +9,7 @@ from app.integrations.llm.factory import create_discovery_llm
 from app.integrations.llm.mock import MockDiscoveryLLM
 from app.integrations.llm.openai import OpenAIDiscoveryError, OpenAIDiscoveryLLM
 from app.modules.discovery.blueprint import get_marketing_discovery_blueprint
+from app.modules.discovery.brief import build_marketing_discovery_brief
 from app.modules.discovery.contracts import (
     BriefInput,
     DecisionInput,
@@ -162,6 +164,30 @@ def test_openai_provider_rejects_missing_parsed_output() -> None:
 
     with pytest.raises(OpenAIDiscoveryError, match="aucune sortie structurée"):
         asyncio.run(provider.extract_answer(extraction_input()))
+
+
+def test_openai_brief_receives_backend_question_requirements() -> None:
+    input_data = BriefInput(
+        consultation_id="consultation-42",
+        objectives=objective_snapshots(),
+    )
+    parsed = build_marketing_discovery_brief(input_data)
+    client = FakeOpenAIClient(parsed)
+    provider = OpenAIDiscoveryLLM(
+        api_key="test-key",
+        model="gpt-5.6-sol",
+        timeout_seconds=10,
+        safety_secret="secret",
+        client=client,
+    )
+
+    result = asyncio.run(provider.generate_brief(input_data))
+    payload = json.loads(str(client.responses.kwargs["input"]))
+
+    assert result is parsed
+    assert len(payload["question_requirements"]) == 8
+    assert payload["question_requirements"][0]["priority"] == "high"
+    assert payload["question_requirements"][0]["source"] == "missing"
 
 
 def test_factory_selects_mock_without_api_credentials() -> None:

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -59,6 +59,13 @@ const detailData: WorkspaceConsultationDetail = {
     missing_information: ["tools_platforms"],
     contradictions: [],
     important_notes: [],
+    recommended_questions: [{
+      topic: "tools_platforms",
+      question: "Quels outils et plateformes devront être pris en compte dans le futur mandat?",
+      reason: "Cette information n’a pas été recueillie pendant la première consultation.",
+      priority: "medium",
+      source: "missing",
+    }],
   },
   objectives: [
     { key: "primary_goal", required: true, state: "confirmed", answer: "Doubler les demandes qualifiées" },
@@ -140,6 +147,7 @@ describe("workspace consultations", () => {
   });
 
   it("shows the brief, missing objectives and raw answers", () => {
+    const printSpy = vi.spyOn(window, "print").mockImplementation(() => undefined);
     render(<WorkspaceConsultationDetailView data={detailData} />);
 
     expect(screen.getByRole("heading", { name: "Services professionnels" })).toBeVisible();
@@ -149,7 +157,12 @@ describe("workspace consultations", () => {
     expect(screen.queryByText(/confidence|source/i)).not.toBeInTheDocument();
     expect(screen.getByText("Créer ou mettre à jour le dossier CRM")).toBeVisible();
     expect(screen.getByText(/Tentative 2/)).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Questions recommandées" })).toBeVisible();
+    expect(screen.getByText(detailData.brief?.recommended_questions[0].question ?? "")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Imprimer / enregistrer en PDF" }));
+    expect(printSpy).toHaveBeenCalledOnce();
     expect(screen.getByRole("heading", { name: /Ce brief prépare-t-il vraiment la rencontre/i })).toBeVisible();
+    printSpy.mockRestore();
   });
 
   it("shows the field-test funnel and evidence criteria", () => {

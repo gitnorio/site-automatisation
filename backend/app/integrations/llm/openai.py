@@ -9,6 +9,7 @@ from openai import AsyncOpenAI
 from pydantic import BaseModel
 
 from app.modules.discovery.blueprint import EXPECTED_IMPOSED_QUESTIONS
+from app.modules.discovery.brief import build_recommended_questions
 from app.modules.discovery.contracts import (
     BriefInput,
     DecisionInput,
@@ -80,9 +81,16 @@ class OpenAIDiscoveryLLM:
         self,
         input_data: BriefInput,
     ) -> MarketingDiscoveryBrief:
+        payload = {
+            "brief_input": input_data.model_dump(mode="json"),
+            "question_requirements": [
+                question.model_dump(mode="json")
+                for question in build_recommended_questions(input_data.objectives)
+            ],
+        }
         return await self._parse(
             instructions=BRIEF_INSTRUCTIONS,
-            payload=input_data.model_dump_json(),
+            payload=json.dumps(payload, ensure_ascii=False),
             consultation_id=input_data.consultation_id,
             output_model=MarketingDiscoveryBrief,
             operation="brief",

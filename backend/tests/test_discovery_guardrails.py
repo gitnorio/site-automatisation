@@ -188,6 +188,27 @@ def test_brief_must_preserve_missing_and_contradictory_objectives() -> None:
         validate_brief_result(input_data, brief)
 
 
+def test_brief_questions_follow_deterministic_clarification_needs() -> None:
+    objectives = objective_snapshots()
+    budget = next(item for item in objectives if item.key == ObjectiveKey.BUDGET)
+    budget.state = ObjectiveState.CONTRADICTION
+    input_data = BriefInput(
+        consultation_id="consultation-1",
+        objectives=objectives,
+    )
+    brief = build_marketing_discovery_brief(input_data)
+
+    assert 3 <= len(brief.recommended_questions) <= 8
+    assert brief.recommended_questions[0].topic == ObjectiveKey.BUDGET
+    assert brief.recommended_questions[0].priority.value == "high"
+    assert brief.recommended_questions[0].source.value == "contradiction"
+    validate_brief_result(input_data, brief)
+
+    brief.recommended_questions[0].source = "deepening"
+    with pytest.raises(DiscoveryGuardrailError, match="besoins détectés"):
+        validate_brief_result(input_data, brief)
+
+
 def test_brief_rejects_a_fact_absent_from_structured_objectives() -> None:
     input_data = BriefInput(
         consultation_id="consultation-1",

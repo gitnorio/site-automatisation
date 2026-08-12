@@ -75,6 +75,19 @@ class QualificationLevel(StrEnum):
     UNQUALIFIED = "unqualified"
 
 
+class RecommendedQuestionPriority(StrEnum):
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+
+
+class RecommendedQuestionSource(StrEnum):
+    MISSING = "missing"
+    PARTIAL = "partial"
+    CONTRADICTION = "contradiction"
+    DEEPENING = "deepening"
+
+
 class BlueprintObjective(StrictContract):
     key: ObjectiveKey
     required: bool
@@ -217,6 +230,14 @@ class QualificationBrief(StrictContract):
     reasons: list[str] = Field(min_length=1)
 
 
+class RecommendedQuestion(StrictContract):
+    topic: ObjectiveKey
+    question: str = Field(min_length=1, max_length=500)
+    reason: str = Field(min_length=1, max_length=500)
+    priority: RecommendedQuestionPriority
+    source: RecommendedQuestionSource
+
+
 class MarketingDiscoveryBrief(StrictContract):
     company: CompanyBrief
     primary_goal: str | None = None
@@ -231,6 +252,10 @@ class MarketingDiscoveryBrief(StrictContract):
     missing_information: list[ObjectiveKey] = Field(default_factory=list)
     contradictions: list[ObjectiveKey] = Field(default_factory=list)
     important_notes: list[str] = Field(default_factory=list)
+    recommended_questions: list[RecommendedQuestion] = Field(
+        default_factory=list,
+        max_length=8,
+    )
 
     @model_validator(mode="after")
     def validate_unique_objective_lists(self) -> "MarketingDiscoveryBrief":
@@ -238,6 +263,9 @@ class MarketingDiscoveryBrief(StrictContract):
             raise ValueError("Les informations manquantes doivent être uniques.")
         if len(self.contradictions) != len(set(self.contradictions)):
             raise ValueError("Les contradictions du brief doivent être uniques.")
+        question_topics = [question.topic for question in self.recommended_questions]
+        if len(question_topics) != len(set(question_topics)):
+            raise ValueError("Chaque sujet de question recommandée doit être unique.")
         return self
 
 

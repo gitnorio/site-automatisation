@@ -107,10 +107,17 @@
   missing_information: string[]
   contradictions: string[]
   important_notes: string[]
+  recommended_questions: Array<{
+    topic: string
+    question: string
+    reason: string
+    priority: "high" | "medium" | "low"
+    source: "missing" | "partial" | "contradiction" | "deepening"
+  }>
 }
 ```
 
-Le brief doit rester structuré. Un rendu humain peut ensuite être généré à partir du JSON.
+Le brief doit rester structuré. Les anciens briefs sans `recommended_questions` restent valides; l'API de l'espace agence reconstitue leurs questions à la lecture sans modifier les réponses historiques. Les nouveaux briefs contiennent au plus huit questions.
 
 ## `automation_deliveries`
 ```ts
@@ -153,6 +160,7 @@ Chaque tentative est conservée séparément. Les erreurs sont nettoyées avant 
 ## `ConsultationReadyEvent`
 ```ts
 {
+  schema_version: 2
   event_id: string
   event_type: "consultation.ready"
   occurred_at: datetime
@@ -170,6 +178,8 @@ Chaque tentative est conservée séparément. Les erreurs sont nettoyées avant 
 ```
 
 `CRMAllowedFields` est une liste blanche explicite dérivée du brief. Elle exclut les réponses brutes, la confiance, les preuves internes et les secrets de configuration.
+
+Dans le schéma `2`, `crm_fields` ajoute `report_version` et `recommended_questions`. Ces ajouts sont compatibles avec les consommateurs qui ignorent les champs inconnus; l'identifiant d'événement, la signature et la clé d'idempotence ne changent pas.
 
 ## `field_test_reviews`
 ```ts

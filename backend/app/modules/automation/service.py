@@ -165,6 +165,7 @@ def build_consultation_ready_event(
             qualification_reasons=brief.qualification.reasons,
             missing_information=brief.missing_information,
             contradictions=brief.contradictions,
+            recommended_questions=brief.recommended_questions,
         ),
         actions=[
             AutomationAction(

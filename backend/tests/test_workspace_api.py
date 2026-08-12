@@ -56,6 +56,7 @@ def create_reviewable_consultation() -> str:
                 objectives=list(state.objectives),
             )
         )
+        brief.recommended_questions = []
         service.create_brief(consultation.id, brief)
         automation = AutomationService(
             SqlAlchemyAutomationRepository(database),
@@ -116,6 +117,14 @@ def test_workspace_detail_exposes_brief_answers_and_safe_objectives(
     assert response.status_code == 200
     payload = response.json()
     assert payload["brief"]["primary_goal"] == "Doubler les demandes qualifiées."
+    assert 3 <= len(payload["brief"]["recommended_questions"]) <= 8
+    assert payload["brief"]["recommended_questions"][0] == {
+        "topic": "company_profile",
+        "question": "Quelles caractéristiques de l’entreprise devons-nous confirmer avant de cadrer le mandat?",
+        "reason": "Cette information n’a pas été recueillie pendant la première consultation.",
+        "priority": "high",
+        "source": "missing",
+    }
     assert payload["turns"][0]["answer"] == "Doubler les demandes qualifiées."
     primary_goal = next(
         objective

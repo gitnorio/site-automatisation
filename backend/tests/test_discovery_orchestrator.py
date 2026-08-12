@@ -70,6 +70,14 @@ class SequencedLLM:
         return await MockDiscoveryLLM().generate_brief(input_data)
 
 
+class FailingBriefLLM(SequencedLLM):
+    async def generate_brief(
+        self,
+        input_data: BriefInput,
+    ) -> MarketingDiscoveryBrief:
+        raise RuntimeError("OpenAI unavailable")
+
+
 def invalid_extraction() -> ExtractionResult:
     return ExtractionResult(
         updates=[
@@ -146,3 +154,19 @@ def test_orchestrator_stops_without_calling_llm() -> None:
 
     assert decision.action.value == "complete"
     assert provider.decision_calls == 0
+
+
+def test_brief_falls_back_to_deterministic_questions_after_llm_failure() -> None:
+    orchestrator = DiscoveryOrchestrator(FailingBriefLLM([]), max_retries=1)
+
+    brief = asyncio.run(
+        orchestrator.generate_brief(
+            BriefInput(
+                consultation_id="consultation-1",
+                objectives=objective_snapshots(),
+            )
+        )
+    )
+
+    assert len(brief.recommended_questions) == 8
+    assert brief.recommended_questions[0].priority.value == "high"

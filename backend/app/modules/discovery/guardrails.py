@@ -5,6 +5,7 @@ import re
 from collections.abc import Iterable
 
 from app.modules.discovery.blueprint import EXPECTED_IMPOSED_QUESTIONS
+from app.modules.discovery.brief import build_recommended_questions
 from app.modules.discovery.contracts import (
     BriefInput,
     DecisionInput,
@@ -155,6 +156,19 @@ def validate_brief_result(
     if brief.qualification != qualify_consultation(input_data.objectives):
         raise DiscoveryGuardrailError(
             "La qualification du brief ne respecte pas les règles déterministes."
+        )
+    expected_questions = build_recommended_questions(input_data.objectives)
+    expected_question_shape = [
+        (question.topic, question.priority, question.source)
+        for question in expected_questions
+    ]
+    actual_question_shape = [
+        (question.topic, question.priority, question.source)
+        for question in brief.recommended_questions
+    ]
+    if actual_question_shape != expected_question_shape:
+        raise DiscoveryGuardrailError(
+            "Les questions du brief ne respectent pas les besoins détectés par le backend."
         )
     source_text = _normalize(
         json.dumps(

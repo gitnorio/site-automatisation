@@ -5,6 +5,7 @@ from collections.abc import Awaitable, Callable
 from typing import TypeVar
 
 from app.integrations.llm.base import DiscoveryLLM
+from app.modules.discovery.brief import build_marketing_discovery_brief
 from app.modules.discovery.contracts import (
     BriefInput,
     DecisionInput,
@@ -68,11 +69,20 @@ class DiscoveryOrchestrator:
         self,
         input_data: BriefInput,
     ) -> MarketingDiscoveryBrief:
-        return await self._run_validated(
-            operation="brief",
-            call=lambda: self.llm.generate_brief(input_data),
-            validate=lambda result: validate_brief_result(input_data, result),
-        )
+        try:
+            return await self._run_validated(
+                operation="brief",
+                call=lambda: self.llm.generate_brief(input_data),
+                validate=lambda result: validate_brief_result(input_data, result),
+            )
+        except DiscoveryLLMExhaustedError:
+            fallback = build_marketing_discovery_brief(input_data)
+            validate_brief_result(input_data, fallback)
+            logger.warning(
+                "discovery_brief_deterministic_fallback consultation_id=%s",
+                input_data.consultation_id,
+            )
+            return fallback
 
     async def _run_validated(
         self,

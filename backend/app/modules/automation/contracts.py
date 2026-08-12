@@ -10,6 +10,7 @@ from app.modules.discovery.contracts import (
     MarketingDiscoveryBrief,
     ObjectiveKey,
     QualificationLevel,
+    RecommendedQuestion,
 )
 
 
@@ -39,6 +40,7 @@ class AutomationAttemptStatus(StrEnum):
 
 
 class CRMAllowedFields(StrictAutomationContract):
+    report_version: int = 1
     company_profile: str | None = None
     target_customer: str | None = None
     primary_goal: str | None = None
@@ -54,6 +56,7 @@ class CRMAllowedFields(StrictAutomationContract):
     qualification_reasons: list[str] = Field(min_length=1)
     missing_information: list[ObjectiveKey] = Field(default_factory=list)
     contradictions: list[ObjectiveKey] = Field(default_factory=list)
+    recommended_questions: list[RecommendedQuestion] = Field(default_factory=list)
 
 
 class AutomationAction(StrictAutomationContract):
@@ -62,7 +65,7 @@ class AutomationAction(StrictAutomationContract):
 
 
 class ConsultationReadyEvent(StrictAutomationContract):
-    schema_version: int = 1
+    schema_version: int = 2
     event_id: str
     event_type: str = "consultation.ready"
     occurred_at: datetime

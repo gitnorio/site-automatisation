@@ -71,6 +71,7 @@ def test_event_contains_only_the_explicit_crm_allowlist(clean_database: None) ->
     serialized = event.model_dump_json()
 
     assert set(event.crm_fields.model_dump()) == {
+        "report_version",
         "company_profile",
         "target_customer",
         "primary_goal",
@@ -86,7 +87,11 @@ def test_event_contains_only_the_explicit_crm_allowlist(clean_database: None) ->
         "qualification_reasons",
         "missing_information",
         "contradictions",
+        "recommended_questions",
     }
+    assert event.schema_version == 2
+    assert event.crm_fields.report_version == 1
+    assert len(event.crm_fields.recommended_questions) == 8
     assert "raw_answer" not in serialized
     assert "confidence" not in serialized
     assert "evidence" not in serialized

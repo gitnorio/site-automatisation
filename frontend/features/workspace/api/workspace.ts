@@ -61,6 +61,18 @@ export type WorkspaceBrief = {
   missing_information: string[];
   contradictions: string[];
   important_notes: string[];
+  recommended_questions: WorkspaceRecommendedQuestion[];
+};
+
+export type RecommendedQuestionPriority = "high" | "medium" | "low";
+export type RecommendedQuestionSource = "missing" | "partial" | "contradiction" | "deepening";
+
+export type WorkspaceRecommendedQuestion = {
+  topic: string;
+  question: string;
+  reason: string;
+  priority: RecommendedQuestionPriority;
+  source: RecommendedQuestionSource;
 };
 
 export type WorkspaceObjective = {

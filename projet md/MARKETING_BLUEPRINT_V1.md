@@ -123,6 +123,8 @@ Signaux :
 - autorité décisionnelle;
 - adéquation avec les services de l'agence.
 
+Hypothèse pilote vérifiable : une fourchette dont le maximum est inférieur à **2 500 $ CA** est `unqualified` lorsque tous les objectifs obligatoires sont confirmés. Une contradiction ou une information obligatoire manquante demeure `follow_up`. Ce seuil devra être validé pendant les tests terrain.
+
 ## 6. Fin de consultation
 
 La consultation se termine lorsque tous les objectifs obligatoires sont `confirmed`.

@@ -8,19 +8,26 @@ os.environ["RATE_LIMIT_WINDOW_SECONDS"] = "3600"
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 
 from app.modules.contact.router import rate_limiter
 from app.core.database import Base, engine
 from app.main import app
 
 
+def reset_test_schema() -> None:
+    Base.metadata.drop_all(bind=engine)
+    with engine.begin() as connection:
+        connection.execute(text("DROP TABLE IF EXISTS alembic_version"))
+
+
 @pytest.fixture
 def clean_database() -> None:
-    Base.metadata.drop_all(bind=engine)
+    reset_test_schema()
     Base.metadata.create_all(bind=engine)
     rate_limiter.reset()
     yield
-    Base.metadata.drop_all(bind=engine)
+    reset_test_schema()
 
 
 @pytest.fixture

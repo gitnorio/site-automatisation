@@ -4,8 +4,15 @@ import { ProspectConsultation } from "@/features/consultation/components/Prospec
 
 export const metadata: Metadata = { title: "Consultation", robots: { index: false, follow: false } };
 
-export default async function ProspectConsultationPage({ params }: { params: Promise<{ consultationId: string }> }) {
+export default async function ProspectConsultationPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ consultationId: string }>;
+  searchParams: Promise<{ token?: string | string[] }>;
+}) {
   const { consultationId } = await params;
+  const { token } = await searchParams;
 
-  return <ProspectConsultation consultationId={consultationId} />;
+  return <ProspectConsultation consultationId={consultationId} token={typeof token === "string" ? token : undefined} />;
 }

@@ -28,6 +28,8 @@ Statut : **terminée**.
 
 ## Phase 1 — Blueprint Marketing v1
 
+Statut : **terminée le 11 août 2026**.
+
 - encoder les 14 objectifs du Blueprint en Python statique;
 - distinguer objectifs obligatoires et optionnels;
 - encoder les six questions imposées;
@@ -35,6 +37,8 @@ Statut : **terminée**.
 - tester intégralement la configuration.
 
 ## Phase 2 — État de consultation
+
+Statut : **terminée le 11 août 2026**.
 
 - créer les modèles SQLAlchemy Organization, Blueprint et Consultation;
 - créer Objective, Turn et DiscoveryBrief;
@@ -45,6 +49,8 @@ Statut : **terminée**.
 
 ## Phase 3 — Moteur LLM
 
+Statut : **terminée le 11 août 2026**.
+
 - implémenter le fournisseur `mock` déterministe;
 - implémenter le fournisseur OpenAI côté serveur;
 - séparer extraction et décision;
@@ -53,6 +59,8 @@ Statut : **terminée**.
 - tester les sorties invalides et les violations de règles.
 
 ## Phase 4 — Expérience prospect
+
+Statut : **terminée le 11 août 2026**.
 
 - créer `/c/[consultationId]` avec un jeton signé ou opaque résolu côté backend;
 - ajouter accueil, progression, question et fin;
@@ -63,6 +71,8 @@ Statut : **terminée**.
 
 ## Phase 5 — Brief et vue agence
 
+Statut : **terminée le 11 août 2026**.
+
 - générer le Marketing Discovery Brief structuré;
 - créer `/app/consultations`;
 - créer `/app/consultations/[id]`;
@@ -72,30 +82,38 @@ Statut : **terminée**.
 
 ## Phase 5.5 — CRM et automatisations de base
 
-- définir une interface de connecteur CRM remplaçable;
-- commencer par un connecteur pilote, puis couvrir Zoho CRM, HubSpot ou l’environnement choisi pour les tests terrain;
-- synchroniser uniquement les champs explicitement autorisés;
-- déclencher des actions simples : création ou mise à jour du dossier, assignation, notification et webhook;
-- journaliser chaque tentative, résultat et reprise sur erreur;
-- conserver les automatisations complexes hors du MVP.
+Statut : **terminée le 11 août 2026**.
+
+- interface de connecteur remplaçable et connecteur webhook pilote signé;
+- liste blanche stricte des champs CRM, sans réponse brute ni trace interne du modèle;
+- actions simples de création ou mise à jour, assignation, notification et webhook;
+- journal durable de chaque livraison, tentative, résultat et reprise limitée;
+- idempotence par événement et isolation des échecs pour préserver le brief;
+- automatisations complexes conservées hors du MVP.
 
 ## Phase 6 — Scénarios obligatoires
 
-- plus de leads avec peu de marketing actuel;
-- Meta Ads avec ROAS en baisse;
-- rebranding après acquisition;
-- budget incompatible;
-- agence actuelle ou précédente;
-- réponses vagues;
-- contradiction sur un objectif obligatoire;
-- abandon avant la fin.
+Statut : **terminée le 11 août 2026**.
+
+- plus de leads avec peu de marketing actuel, sans inventer de canal actif;
+- Meta Ads avec ROAS en baisse, conservé factuellement dans le brief;
+- rebranding après acquisition, relié au besoin de branding;
+- budget incompatible, classé `unqualified` par une règle backend déterministe;
+- agence actuelle ou précédente, décrite sans jugement ni critique;
+- réponse vague, suivie d’une demande de précision sur le même objectif;
+- contradiction obligatoire, clarifiée avant tout objectif inconnu;
+- abandon avant la fin, avec réponses conservées et données manquantes explicites.
 
 ## Phase 7 — Tests terrain
 
-- observer de vraies consultations;
-- mesurer démarrage, complétion, durée et abandons;
-- recueillir l’évaluation des briefs par les agences;
-- ne pas ajouter CRM, documents, voix ou paiement avant validation du moteur.
+Statut : **dispositif prêt le 11 août 2026; observations réelles à exécuter**.
+
+- carnet de preuves disponible dans `/app/field-tests`;
+- démarrage, complétion, durée, réponses et abandons calculés automatiquement;
+- fiche structurée d’observation prospect et d’évaluation du brief par consultation;
+- protocole pilote, seuils de décision et règles de confidentialité documentés;
+- campagne avec de vrais prospects et de vraies agences encore requise;
+- documents, voix et paiement gelés jusqu’à validation empirique du moteur.
 
 ## Critères de réussite MVP
 

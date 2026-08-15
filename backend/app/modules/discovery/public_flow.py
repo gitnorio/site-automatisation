@@ -174,6 +174,9 @@ class PublicConsultationFlow:
                     BriefInput(
                         consultation_id=consultation_id,
                         completed_at=consultation.completed_at,
+                        minimum_qualifying_budget_cad=(
+                            consultation.organization.minimum_qualifying_budget_cad
+                        ),
                         objectives=list(state.objectives),
                     )
                 )

@@ -40,7 +40,7 @@ Les **phases 0 à 6**, le refactoring structurel et le dispositif de la phase 7 
 - API interne protégée qui n’expose ni confiance, ni source, ni traces du modèle;
 - liste agence avec progression, statut et qualification;
 - dossier agence avec synthèse, objectifs complets ou incomplets et réponses brutes;
-- fiche agence imprimable ou enregistrable en PDF depuis le navigateur;
+- fiche agence professionnelle exportable en PDF A4 sur une seule page;
 - connecteur d’automatisation remplaçable avec webhook pilote signé par HMAC;
 - liste blanche stricte des données CRM, sans réponse brute ni trace interne du modèle;
 - actions simples de dossier CRM, assignation, notification et webhook;
@@ -48,7 +48,8 @@ Les **phases 0 à 6**, le refactoring structurel et le dispositif de la phase 7 
 - échec d’automatisation isolé : un brief valide demeure toujours disponible;
 - huit scénarios métier obligatoires exécutés sans réseau avec le fournisseur `mock`;
 - réponses vagues et contradictions obligatoires suivies selon leur priorité;
-- budget inférieur au seuil MVP provisoire classé `unqualified` par le backend;
+- seuil budgétaire MVP configurable par organisation depuis `/app/settings`;
+- budget inférieur au seuil configuré classé `unqualified` par le backend;
 - carnet de preuves terrain avec funnel, durée médiane, abandons et questions répondues;
 - revue humaine structurée de l’expérience prospect et de l’utilité de chaque brief;
 - critères qualitatifs agrégés uniquement depuis les consultations observées en direct;
@@ -200,7 +201,7 @@ Le connecteur d’automatisation reste désactivé par défaut. Lorsqu’il est 
 
 Le webhook `consultation.ready` utilise maintenant le schéma `2`. Son bloc `crm_fields` inclut `report_version`, `recommended_questions`, `missing_information` et `contradictions`, en plus des champs de qualification existants. Chaque question contient son sujet, son texte, sa raison, sa priorité et son origine.
 
-La qualification MVP est recalculée et validée par le backend. Le seuil budgétaire pilote est fixé provisoirement à **2 500 $ CA** pour rendre le scénario « budget incompatible » vérifiable; il devra être confirmé ou rendu configurable avec les agences pendant la campagne terrain.
+La qualification MVP est recalculée et validée par le backend. Le seuil budgétaire pilote vaut **2 500 $ CA par défaut**, mais chaque organisation peut le modifier dans `/app/settings`; une valeur de **0 $** désactive la disqualification automatique fondée sur le budget. Le réglage s’applique aux rapports générés après sa modification, sans réécrire les rapports historiques. Il ne remplace pas intentionnellement les cinq signaux du Blueprint; une qualification commerciale avancée devra leur attribuer une pondération explicite.
 
 Le carnet terrain n’enregistre pas l’identité du prospect. Les notes d’observation doivent rester anonymes. Les taux qualitatifs n’utilisent que les revues marquées « observée en direct » afin de distinguer une observation réelle d’une simple lecture du brief.
 

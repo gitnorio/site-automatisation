@@ -83,7 +83,10 @@ def build_marketing_discovery_brief(input_data: BriefInput) -> MarketingDiscover
                 objectives.get(ObjectiveKey.DECISION_PROCESS)
             )
         ),
-        qualification=qualify_consultation(input_data.objectives),
+        qualification=qualify_consultation(
+            input_data.objectives,
+            minimum_budget_cad=input_data.minimum_qualifying_budget_cad,
+        ),
         missing_information=missing,
         contradictions=contradictions,
         recommended_questions=build_recommended_questions(input_data.objectives),

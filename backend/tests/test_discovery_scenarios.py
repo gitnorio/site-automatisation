@@ -41,11 +41,20 @@ DEFAULT_ANSWERS: dict[ObjectiveKey, str | list[str]] = {
 }
 
 
-def create_public_consultation() -> tuple[str, str]:
+def create_public_consultation(
+    *,
+    minimum_budget_cad: int = 2_500,
+) -> tuple[str, str]:
     settings = get_settings()
     with SessionLocal() as database:
-        service = DiscoveryService(SqlAlchemyDiscoveryRepository(database))
+        repository = SqlAlchemyDiscoveryRepository(database)
+        service = DiscoveryService(repository)
         organization = service.create_organization("Agence Scénarios")
+        repository.update_organization_minimum_budget(
+            organization.id,
+            minimum_budget_cad,
+        )
+        repository.commit()
         blueprint = service.create_blueprint(
             organization.id,
             get_marketing_discovery_blueprint(),
@@ -66,8 +75,12 @@ def public_url(consultation_id: str, token: str, suffix: str) -> str:
 def run_scenario(
     client: TestClient,
     overrides: Mapping[ObjectiveKey, str | list[str]],
+    *,
+    minimum_budget_cad: int = 2_500,
 ) -> tuple[str, dict[str, object], list[ObjectiveKey]]:
-    consultation_id, token = create_public_consultation()
+    consultation_id, token = create_public_consultation(
+        minimum_budget_cad=minimum_budget_cad,
+    )
     response = client.post(public_url(consultation_id, token, "/start"))
     asked_objectives: list[ObjectiveKey] = []
 
@@ -148,6 +161,19 @@ def test_scenario_incompatible_budget_is_unqualified(client: TestClient) -> None
 
     assert brief["qualification"]["level"] == QualificationLevel.UNQUALIFIED
     assert "2 500 $ CA" in brief["qualification"]["reasons"][0]
+
+
+def test_scenario_uses_the_company_configured_budget_threshold(
+    client: TestClient,
+) -> None:
+    _, brief, _ = run_scenario(
+        client,
+        {ObjectiveKey.BUDGET: "4 000 $ à 6 000 $ CA par mois."},
+        minimum_budget_cad=7_500,
+    )
+
+    assert brief["qualification"]["level"] == QualificationLevel.UNQUALIFIED
+    assert "7 500 $ CA" in brief["qualification"]["reasons"][0]
 
 
 def test_scenario_current_or_previous_agency_remains_factual(client: TestClient) -> None:

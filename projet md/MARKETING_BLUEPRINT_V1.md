@@ -123,7 +123,11 @@ Signaux :
 - autorité décisionnelle;
 - adéquation avec les services de l'agence.
 
-Hypothèse pilote vérifiable : une fourchette dont le maximum est inférieur à **2 500 $ CA** est `unqualified` lorsque tous les objectifs obligatoires sont confirmés. Une contradiction ou une information obligatoire manquante demeure `follow_up`. Ce seuil devra être validé pendant les tests terrain.
+Décision MVP : un seuil budgétaire configurable est une simplification temporaire de qualification, pas le remplacement permanent des cinq signaux ci-dessus. Sa valeur initiale est **2 500 $ CA** et l’agence peut la modifier elle-même dans les paramètres.
+
+Règle pilote vérifiable : une fourchette dont le maximum est inférieur au seuil de l’organisation est `unqualified` lorsque tous les objectifs obligatoires sont confirmés. Une valeur de **0 $** désactive ce filtre. Une contradiction ou une information obligatoire manquante demeure `follow_up`.
+
+Les autres signaux du Blueprint sont capturés dans le brief pour préparer l'entrevue, mais ils ne sont pas encore convertis en score pondéré dans le MVP. Avant une version commercialisée comme qualification avancée, la qualification devra réintroduire une pondération explicite des cinq signaux.
 
 ## 6. Fin de consultation
 

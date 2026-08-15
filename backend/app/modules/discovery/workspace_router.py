@@ -15,9 +15,15 @@ from app.modules.discovery.workspace_schemas import (
     WorkspaceConsultationDetail,
     WorkspaceConsultationList,
     WorkspaceIntegrationSettings,
+    WorkspaceQualificationSettings,
+    WorkspaceQualificationSettingsInput,
+    WorkspaceQualificationSettingsList,
 )
 from app.modules.automation.contracts import AutomationActionType
-from app.modules.discovery.workspace_service import WorkspaceQueryService
+from app.modules.discovery.workspace_service import (
+    WorkspaceQueryService,
+    WorkspaceSettingsService,
+)
 from app.modules.field_testing.contracts import (
     FieldTestDashboard,
     FieldTestReview,
@@ -46,6 +52,12 @@ def get_workspace_service(
     database: Session = Depends(get_db),
 ) -> WorkspaceQueryService:
     return WorkspaceQueryService(SqlAlchemyDiscoveryRepository(database))
+
+
+def get_workspace_settings_service(
+    database: Session = Depends(get_db),
+) -> WorkspaceSettingsService:
+    return WorkspaceSettingsService(SqlAlchemyDiscoveryRepository(database))
 
 
 def get_field_test_service(
@@ -97,6 +109,36 @@ def get_integration_settings(
         max_attempts=settings.automation_max_retries + 1,
         actions=[action.value for action in AutomationActionType],
     )
+
+
+@router.get(
+    "/qualification-settings",
+    response_model=WorkspaceQualificationSettingsList,
+    dependencies=[Depends(authorize_workspace)],
+)
+def get_qualification_settings(
+    service: WorkspaceSettingsService = Depends(get_workspace_settings_service),
+) -> WorkspaceQualificationSettingsList:
+    return service.list_qualification_settings()
+
+
+@router.put(
+    "/organizations/{organization_id}/qualification-settings",
+    response_model=WorkspaceQualificationSettings,
+    dependencies=[Depends(authorize_workspace)],
+)
+def update_qualification_settings(
+    organization_id: str,
+    payload: WorkspaceQualificationSettingsInput,
+    service: WorkspaceSettingsService = Depends(get_workspace_settings_service),
+) -> WorkspaceQualificationSettings:
+    try:
+        return service.update_qualification_settings(organization_id, payload)
+    except DiscoveryRecordNotFoundError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Organisation introuvable.",
+        ) from error
 
 
 @router.get(

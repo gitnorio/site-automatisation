@@ -2,8 +2,15 @@
 
 ## `organizations`
 ```ts
-{ id: string; name: string; created_at: datetime }
+{
+  id: string
+  name: string
+  minimum_qualifying_budget_cad: number
+  created_at: datetime
+}
 ```
+
+`minimum_qualifying_budget_cad` vaut 2 500 par défaut. Une valeur de 0 désactive la disqualification automatique fondée sur le budget. Le montant est lu au moment de générer le rapport afin de préserver les rapports historiques.
 
 ## `blueprints`
 ```ts

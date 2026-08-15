@@ -107,6 +107,27 @@ class WorkspaceIntegrationSettings(BaseModel):
     actions: list[str]
 
 
+class WorkspaceQualificationSettingsInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    minimum_qualifying_budget_cad: int = Field(ge=0, le=10_000_000)
+
+
+class WorkspaceQualificationSettings(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    organization_id: str
+    organization_name: str
+    minimum_qualifying_budget_cad: int = Field(ge=0, le=10_000_000)
+    currency: str = "CAD"
+
+
+class WorkspaceQualificationSettingsList(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    organizations: list[WorkspaceQualificationSettings]
+
+
 class WorkspaceConsultationDetail(BaseModel):
     model_config = ConfigDict(extra="forbid")
 

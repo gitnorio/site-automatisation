@@ -51,6 +51,14 @@ class DiscoveryRepository(Protocol):
 
     def list_workspace_consultations(self) -> list[ConsultationModel]: ...
 
+    def list_workspace_organizations(self) -> list[OrganizationModel]: ...
+
+    def update_organization_minimum_budget(
+        self,
+        organization_id: str,
+        minimum_budget_cad: int,
+    ) -> OrganizationModel: ...
+
     def get_workspace_consultation(
         self, consultation_id: str
     ) -> ConsultationModel: ...
@@ -213,6 +221,20 @@ class SqlAlchemyDiscoveryRepository:
             .order_by(ConsultationModel.created_at.desc())
         )
         return list(self.database.scalars(statement).all())
+
+    def list_workspace_organizations(self) -> list[OrganizationModel]:
+        statement = select(OrganizationModel).order_by(OrganizationModel.created_at)
+        return list(self.database.scalars(statement).all())
+
+    def update_organization_minimum_budget(
+        self,
+        organization_id: str,
+        minimum_budget_cad: int,
+    ) -> OrganizationModel:
+        organization = self._get_organization(organization_id)
+        organization.minimum_qualifying_budget_cad = minimum_budget_cad
+        self.database.flush()
+        return organization
 
     def get_workspace_consultation(
         self,

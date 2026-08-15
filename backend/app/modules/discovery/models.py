@@ -30,9 +30,20 @@ def new_uuid() -> str:
 
 class OrganizationModel(Base):
     __tablename__ = "organizations"
+    __table_args__ = (
+        CheckConstraint(
+            "minimum_qualifying_budget_cad BETWEEN 0 AND 10000000",
+            name="ck_organizations_minimum_qualifying_budget",
+        ),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     name: Mapped[str] = mapped_column(String(150))
+    minimum_qualifying_budget_cad: Mapped[int] = mapped_column(
+        Integer,
+        default=2_500,
+        server_default="2500",
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
     blueprints: Mapped[list["BlueprintModel"]] = relationship(

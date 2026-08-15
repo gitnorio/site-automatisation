@@ -59,6 +59,25 @@ def test_budget_at_mvp_threshold_is_compatible() -> None:
     assert qualification.level == QualificationLevel.PRIORITY
 
 
+def test_organization_can_raise_its_budget_threshold() -> None:
+    qualification = qualify_consultation(
+        completed_required_objectives({"answer": "4 000 $ à 6 000 $ CA par mois"}),
+        minimum_budget_cad=7_500,
+    )
+
+    assert qualification.level == QualificationLevel.UNQUALIFIED
+    assert "7 500 $ CA" in qualification.reasons[0]
+
+
+def test_zero_disables_budget_disqualification() -> None:
+    qualification = qualify_consultation(
+        completed_required_objectives({"answer": "500 $ à 1 000 $ CA par mois"}),
+        minimum_budget_cad=0,
+    )
+
+    assert qualification.level == QualificationLevel.PRIORITY
+
+
 def test_missing_required_information_takes_priority_over_low_budget() -> None:
     objectives = completed_required_objectives({"answer": "1 000 $ CA par mois"})
     company = next(

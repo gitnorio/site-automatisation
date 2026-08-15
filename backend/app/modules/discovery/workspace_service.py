@@ -14,6 +14,7 @@ from app.modules.discovery.brief import build_recommended_questions
 from app.modules.discovery.models import (
     ConsultationModel,
     ConsultationObjectiveModel,
+    OrganizationModel,
 )
 from app.modules.discovery.repository import DiscoveryRepository
 from app.modules.discovery.workspace_schemas import (
@@ -25,6 +26,9 @@ from app.modules.discovery.workspace_schemas import (
     WorkspaceAutomationDelivery,
     WorkspaceMetrics,
     WorkspaceObjective,
+    WorkspaceQualificationSettings,
+    WorkspaceQualificationSettingsInput,
+    WorkspaceQualificationSettingsList,
     WorkspaceTurn,
 )
 from app.modules.field_testing.service import field_test_review_from_model
@@ -163,6 +167,45 @@ class WorkspaceQueryService:
                 else None
             ),
         )
+
+
+class WorkspaceSettingsService:
+    def __init__(self, repository: DiscoveryRepository) -> None:
+        self.repository = repository
+
+    def list_qualification_settings(self) -> WorkspaceQualificationSettingsList:
+        return WorkspaceQualificationSettingsList(
+            organizations=[
+                _qualification_settings(organization)
+                for organization in self.repository.list_workspace_organizations()
+            ]
+        )
+
+    def update_qualification_settings(
+        self,
+        organization_id: str,
+        payload: WorkspaceQualificationSettingsInput,
+    ) -> WorkspaceQualificationSettings:
+        try:
+            organization = self.repository.update_organization_minimum_budget(
+                organization_id,
+                payload.minimum_qualifying_budget_cad,
+            )
+            self.repository.commit()
+            return _qualification_settings(organization)
+        except Exception:
+            self.repository.rollback()
+            raise
+
+
+def _qualification_settings(
+    organization: OrganizationModel,
+) -> WorkspaceQualificationSettings:
+    return WorkspaceQualificationSettings(
+        organization_id=organization.id,
+        organization_name=organization.name,
+        minimum_qualifying_budget_cad=organization.minimum_qualifying_budget_cad,
+    )
 
 
 def _brief(record: ConsultationModel) -> MarketingDiscoveryBrief | None:

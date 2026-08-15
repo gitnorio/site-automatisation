@@ -201,6 +201,17 @@ export type WorkspaceIntegrationSettings = {
   actions: string[];
 };
 
+export type WorkspaceQualificationSettings = {
+  organization_id: string;
+  organization_name: string;
+  minimum_qualifying_budget_cad: number;
+  currency: "CAD";
+};
+
+export type WorkspaceQualificationSettingsList = {
+  organizations: WorkspaceQualificationSettings[];
+};
+
 export class WorkspaceApiError extends Error {
   constructor(message: string, readonly status: number) {
     super(message);
@@ -221,6 +232,25 @@ export function getWorkspaceConsultation(consultationId: string): Promise<Worksp
 
 export function getWorkspaceIntegrationSettings(): Promise<WorkspaceIntegrationSettings> {
   return workspaceRequest("/api/v1/workspace/integrations");
+}
+
+export function getWorkspaceQualificationSettings(): Promise<WorkspaceQualificationSettingsList> {
+  return workspaceRequest("/api/v1/workspace/qualification-settings");
+}
+
+export function saveWorkspaceQualificationSettings(
+  organizationId: string,
+  minimumQualifyingBudgetCad: number,
+): Promise<WorkspaceQualificationSettings> {
+  return workspaceRequest(
+    `/api/v1/workspace/organizations/${encodeURIComponent(organizationId)}/qualification-settings`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        minimum_qualifying_budget_cad: minimumQualifyingBudgetCad,
+      }),
+    },
+  );
 }
 
 export function getWorkspaceFieldTests(): Promise<FieldTestDashboard> {

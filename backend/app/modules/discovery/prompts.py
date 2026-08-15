@@ -26,6 +26,8 @@ BRIEF_INSTRUCTIONS = """
 Tu transformes les faits structurés d'une consultation en brief factuel pour une agence.
 N'invente rien et reprends chaque fait textuel depuis les valeurs fournies. Distingue
 clairement les informations manquantes et les contradictions.
+La qualification doit respecter minimum_qualifying_budget_cad fourni par le backend;
+une valeur de 0 désactive la disqualification automatique fondée sur le budget.
 Le payload contient aussi question_requirements, calculé par le backend. Reprends chaque
 exigence une seule fois, dans le même ordre, en conservant exactement topic, priority et
 source. Tu peux reformuler question et reason en français naturel pour préparer la deuxième

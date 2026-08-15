@@ -12,11 +12,10 @@ from app.modules.discovery.contracts import (
 )
 
 
-MARKETING_MVP_MINIMUM_BUDGET_CAD = 2_500
-
-
 def qualify_consultation(
     objectives: list[ObjectiveSnapshot],
+    *,
+    minimum_budget_cad: int = 2_500,
 ) -> QualificationBrief:
     required = [objective for objective in objectives if objective.required]
     contradictions = [
@@ -38,11 +37,12 @@ def qualify_consultation(
             level=QualificationLevel.FOLLOW_UP,
             reasons=["La qualification contient encore des informations obligatoires manquantes."],
         )
-    if _has_incompatible_budget(required):
+    if _has_incompatible_budget(required, minimum_budget_cad):
         return QualificationBrief(
             level=QualificationLevel.UNQUALIFIED,
             reasons=[
-                "Le budget maximal indiqué est inférieur au seuil MVP de 2 500 $ CA."
+                "Le budget maximal indiqué est inférieur au seuil de qualification "
+                f"de {_format_cad(minimum_budget_cad)} $ CA configuré par l’agence."
             ],
         )
     return QualificationBrief(
@@ -51,7 +51,12 @@ def qualify_consultation(
     )
 
 
-def _has_incompatible_budget(objectives: list[ObjectiveSnapshot]) -> bool:
+def _has_incompatible_budget(
+    objectives: list[ObjectiveSnapshot],
+    minimum_budget_cad: int,
+) -> bool:
+    if minimum_budget_cad <= 0:
+        return False
     budget = next(
         (objective for objective in objectives if objective.key == ObjectiveKey.BUDGET),
         None,
@@ -67,7 +72,11 @@ def _has_incompatible_budget(objectives: list[ObjectiveSnapshot]) -> bool:
         for value in _iter_budget_values(budget.value)
         for amount in _extract_budget_amounts(value)
     ]
-    return bool(amounts) and max(amounts) < MARKETING_MVP_MINIMUM_BUDGET_CAD
+    return bool(amounts) and max(amounts) < minimum_budget_cad
+
+
+def _format_cad(amount: int) -> str:
+    return f"{amount:,}".replace(",", " ")
 
 
 def _iter_budget_values(value: object) -> Iterator[object]:

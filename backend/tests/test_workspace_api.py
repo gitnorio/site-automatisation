@@ -166,3 +166,48 @@ def test_workspace_exposes_safe_integration_configuration(client: TestClient) ->
             "webhook.deliver",
         ],
     }
+
+
+def test_workspace_company_can_configure_its_qualification_budget(
+    client: TestClient,
+) -> None:
+    create_reviewable_consultation()
+    settings_response = client.get(
+        "/api/v1/workspace/qualification-settings",
+        headers=workspace_headers(),
+    )
+
+    assert settings_response.status_code == 200
+    settings = settings_response.json()["organizations"][0]
+    assert settings["minimum_qualifying_budget_cad"] == 2_500
+    assert settings["currency"] == "CAD"
+
+    update_response = client.put(
+        f"/api/v1/workspace/organizations/{settings['organization_id']}/qualification-settings",
+        headers=workspace_headers(),
+        json={"minimum_qualifying_budget_cad": 7_500},
+    )
+
+    assert update_response.status_code == 200
+    assert update_response.json()["minimum_qualifying_budget_cad"] == 7_500
+    refreshed = client.get(
+        "/api/v1/workspace/qualification-settings",
+        headers=workspace_headers(),
+    )
+    assert refreshed.json()["organizations"][0]["minimum_qualifying_budget_cad"] == 7_500
+
+
+def test_workspace_rejects_an_invalid_qualification_budget(client: TestClient) -> None:
+    create_reviewable_consultation()
+    settings = client.get(
+        "/api/v1/workspace/qualification-settings",
+        headers=workspace_headers(),
+    ).json()["organizations"][0]
+
+    response = client.put(
+        f"/api/v1/workspace/organizations/{settings['organization_id']}/qualification-settings",
+        headers=workspace_headers(),
+        json={"minimum_qualifying_budget_cad": -1},
+    )
+
+    assert response.status_code == 422

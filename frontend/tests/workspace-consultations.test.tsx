@@ -150,16 +150,18 @@ describe("workspace consultations", () => {
     const printSpy = vi.spyOn(window, "print").mockImplementation(() => undefined);
     render(<WorkspaceConsultationDetailView data={detailData} />);
 
-    expect(screen.getByRole("heading", { name: "Services professionnels" })).toBeVisible();
+    expect(screen.getAllByRole("heading", { name: "Services professionnels" })[0]).toBeVisible();
     expect(screen.getAllByText("Outils et plateformes").length).toBeGreaterThan(1);
     expect(screen.getByText("Quel résultat concret espérez-vous atteindre?")).toBeVisible();
     expect(screen.getAllByText("Doubler les demandes qualifiées").length).toBeGreaterThan(1);
     expect(screen.queryByText(/confidence|source/i)).not.toBeInTheDocument();
     expect(screen.getByText("Créer ou mettre à jour le dossier CRM")).toBeVisible();
     expect(screen.getByText(/Tentative 2/)).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Questions recommandées" })).toBeVisible();
-    expect(screen.getByText(detailData.brief?.recommended_questions[0].question ?? "")).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Imprimer / enregistrer en PDF" }));
+    expect(screen.getAllByRole("heading", { name: "Questions recommandées" })[0]).toBeVisible();
+    expect(screen.getAllByText(detailData.brief?.recommended_questions[0].question ?? "")[0]).toBeVisible();
+    expect(screen.getByTestId("brief-print-sheet")).toBeInTheDocument();
+    expect(screen.getByText("Document de travail confidentiel · usage interne à l’agence")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Exporter le PDF — 1 page" }));
     expect(printSpy).toHaveBeenCalledOnce();
     expect(screen.getByRole("heading", { name: /Ce brief prépare-t-il vraiment la rencontre/i })).toBeVisible();
     printSpy.mockRestore();

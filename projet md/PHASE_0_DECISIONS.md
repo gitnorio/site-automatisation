@@ -54,8 +54,16 @@ Les routes ne sont pas implémentées en phase 0.
 - fournisseur d’authentification de la vue agence;
 - choix éventuel d’un hébergement PostgreSQL géré, dont Supabase;
 - politique définitive de conservation et suppression;
-- seuils commerciaux définitifs au-delà de l’hypothèse pilote de 2 500 $ CA;
+- pondération commerciale définitive des cinq signaux du Blueprint;
 - premier connecteur CRM pilote;
 - documents, paiement, automatisations complexes et analytics avancés.
 
 Ces décisions ne bloquent pas le moteur local des phases 1 à 3.
+
+## Décision MVP — qualification
+
+Le MVP ne remplace pas les cinq signaux de qualification du Blueprint par le seul seuil budgétaire.
+
+La règle actuelle est volontairement plus simple : le backend classe un dossier complet `unqualified` uniquement lorsque le budget maximal déclaré est inférieur au seuil configuré par l’organisation. La valeur initiale est **2 500 $ CA**. L’entreprise peut la modifier elle-même dans les paramètres du workspace ou inscrire **0 $** pour désactiver ce filtre. Le nouveau réglage s’applique aux rapports générés par la suite; les rapports historiques ne sont pas recalculés.
+
+Cette règle existe pour rendre le scénario pilote « budget incompatible » déterministe, testable et vérifiable sans score commercial complexe. Les autres signaux, soit la clarté du besoin, l'urgence, l'autorité décisionnelle et l'adéquation avec les services de l'agence, sont conservés dans le brief et les questions recommandées. Ils ne sont pas encore pondérés automatiquement.

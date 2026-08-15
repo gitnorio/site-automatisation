@@ -153,7 +153,10 @@ def validate_brief_result(
         raise DiscoveryGuardrailError("Le brief ne reflète pas les informations manquantes.")
     if set(brief.contradictions) != expected_contradictions:
         raise DiscoveryGuardrailError("Le brief ne reflète pas les contradictions.")
-    if brief.qualification != qualify_consultation(input_data.objectives):
+    if brief.qualification != qualify_consultation(
+        input_data.objectives,
+        minimum_budget_cad=input_data.minimum_qualifying_budget_cad,
+    ):
         raise DiscoveryGuardrailError(
             "La qualification du brief ne respecte pas les règles déterministes."
         )

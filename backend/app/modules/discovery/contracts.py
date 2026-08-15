@@ -272,6 +272,7 @@ class MarketingDiscoveryBrief(StrictContract):
 class BriefInput(StrictContract):
     consultation_id: str = Field(min_length=1, max_length=80)
     completed_at: datetime | None = None
+    minimum_qualifying_budget_cad: int = Field(default=2_500, ge=0, le=10_000_000)
     objectives: list[ObjectiveSnapshot] = Field(min_length=1)
 
     @model_validator(mode="after")

@@ -54,12 +54,21 @@ export function WorkspaceConsultationDetailView({ data }: { data: WorkspaceConsu
       </header>
 
       {data.brief ? (
-        <BriefOverview
-          brief={data.brief}
-          consultationId={data.id}
-          generatedAt={data.completed_at ?? data.created_at}
-          organizationName={data.organization_name}
-        />
+        <>
+          <BriefOverview
+            brief={data.brief}
+            consultationId={data.id}
+            generatedAt={data.completed_at ?? data.created_at}
+            organizationName={data.organization_name}
+          />
+          <PrintBriefSheet
+            brief={data.brief}
+            consultationId={data.id}
+            generatedAt={data.completed_at ?? data.created_at}
+            organizationName={data.organization_name}
+            title={title}
+          />
+        </>
       ) : <PendingBrief status={data.status} />}
       <AutomationOverview automations={data.automations} />
       {data.brief ? <FieldTestReviewForm consultationId={data.id} review={data.field_test_review} /> : null}
@@ -92,6 +101,129 @@ export function WorkspaceConsultationDetailView({ data }: { data: WorkspaceConsu
       </div>
     </section>
   );
+}
+
+function PrintBriefSheet({
+  brief,
+  consultationId,
+  generatedAt,
+  organizationName,
+  title,
+}: {
+  brief: WorkspaceBrief;
+  consultationId: string;
+  generatedAt: string;
+  organizationName: string;
+  title: string;
+}) {
+  const attentionItems = [
+    ...brief.contradictions.map((item) => `${objectiveLabels[item] ?? item} à clarifier`),
+    ...brief.missing_information.map((item) => `${objectiveLabels[item] ?? item} à compléter`),
+    ...brief.important_notes,
+  ];
+  return (
+    <article
+      className="brief-print-sheet"
+      aria-hidden="true"
+      data-testid="brief-print-sheet"
+    >
+      <div className="brief-print-sheet__topline">
+        <strong>KOTO / DISCOVERY</strong>
+        <span>Préparation de la deuxième entrevue</span>
+      </div>
+
+      <header className="brief-print-sheet__header">
+        <div>
+          <span>Dossier client</span>
+          <h1>{title}</h1>
+          <p>{brief.primary_goal ?? "Objectif principal à confirmer"}</p>
+        </div>
+        <dl>
+          <div><dt>Préparé pour</dt><dd>{organizationName}</dd></div>
+          <div><dt>Dossier</dt><dd>#{consultationId.slice(0, 8).toUpperCase()}</dd></div>
+          <div><dt>Généré</dt><dd>{formatDate(generatedAt)}</dd></div>
+        </dl>
+      </header>
+
+      <section className="brief-print-sheet__summary">
+        <div className="brief-print-sheet__summary-main">
+          <div className="brief-print-sheet__trigger">
+            <span>Élément déclencheur</span>
+            <p>{brief.trigger_problem ?? "Aucun élément déclencheur formulé."}</p>
+          </div>
+          <dl className="brief-print-sheet__facts">
+            <PrintFact label="Service recherché" value={brief.service_sought} />
+            <PrintFact label="Budget" value={brief.budget} />
+            <PrintFact label="Échéancier" value={brief.timeline} />
+            <PrintFact label="Clientèle cible" value={brief.company.target_customer} />
+          </dl>
+        </div>
+        <aside>
+          <div className={`brief-print-sheet__qualification brief-print-sheet__qualification--${brief.qualification.level}`}>
+            <span>Qualification</span>
+            <strong>{qualificationLabel(brief.qualification.level)}</strong>
+            <p>{brief.qualification.reasons.join(" ")}</p>
+          </div>
+          <div className="brief-print-sheet__attention">
+            <span>Points à valider</span>
+            <p>{attentionItems.length ? attentionItems.join(" · ") : "Aucun point obligatoire à clarifier."}</p>
+          </div>
+        </aside>
+      </section>
+
+      <section className="brief-print-sheet__questions">
+        <header>
+          <div><span>Feuille de conduite</span><h2>Questions recommandées</h2></div>
+          <p>{brief.recommended_questions.length} question{brief.recommended_questions.length > 1 ? "s" : ""} pour préciser le mandat</p>
+        </header>
+        {brief.recommended_questions.length ? (
+          <ol>
+            {brief.recommended_questions.map((question, index) => (
+              <li key={question.topic}>
+                <span className="brief-print-sheet__question-number">{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <div className="brief-print-sheet__question-meta">
+                    <span>{objectiveLabels[question.topic] ?? question.topic}</span>
+                    <strong>{questionPriorityShortLabel(question.priority)}</strong>
+                  </div>
+                  <h3>{question.question}</h3>
+                  <p>{question.reason}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : <p className="brief-print-sheet__questions-empty">Aucune question recommandée pour ce dossier.</p>}
+      </section>
+
+      <section className="brief-print-sheet__context">
+        <PrintContext label="Canaux actuels" values={brief.current_marketing?.channels ?? []} fallback="Non précisés" />
+        <PrintContext label="Outils" values={brief.current_marketing?.tools ?? []} fallback="Non précisés" />
+        <PrintContext label="Expérience agence" values={brief.previous_agency_experience ? [brief.previous_agency_experience] : []} fallback="Non précisée" />
+        <PrintContext label="Décision" values={brief.decision?.respondent_role ? [brief.decision.respondent_role] : []} fallback="Non précisée" />
+      </section>
+
+      <footer className="brief-print-sheet__footer">
+        <span>Document de travail confidentiel · usage interne à l’agence</span>
+        <strong>1 / 1</strong>
+      </footer>
+    </article>
+  );
+}
+
+function PrintFact({ label, value }: { label: string; value: string | null }) {
+  return <div><dt>{label}</dt><dd>{value ?? "Non précisé"}</dd></div>;
+}
+
+function PrintContext({
+  label,
+  values,
+  fallback,
+}: {
+  label: string;
+  values: string[];
+  fallback: string;
+}) {
+  return <div><span>{label}</span><p>{values.length ? values.join(", ") : fallback}</p></div>;
 }
 
 function AutomationOverview({ automations }: { automations: WorkspaceAutomationDelivery[] }) {
@@ -234,4 +366,14 @@ function automationActionLabel(action: string): string {
 function questionPriorityLabel(priority: WorkspaceRecommendedQuestion["priority"]): string {
   const labels = { high: "Priorité haute", medium: "Priorité moyenne", low: "À approfondir" };
   return labels[priority];
+}
+
+function questionPriorityShortLabel(priority: WorkspaceRecommendedQuestion["priority"]): string {
+  const labels = { high: "Haute", medium: "Moyenne", low: "Approfondir" };
+  return labels[priority];
+}
+
+function qualificationLabel(level: WorkspaceBrief["qualification"]["level"]): string {
+  const labels = { priority: "Prioritaire", follow_up: "À clarifier", unqualified: "Non qualifié" };
+  return labels[level];
 }
